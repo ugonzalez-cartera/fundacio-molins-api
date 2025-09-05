@@ -1,0 +1,28 @@
+{
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "lint:fix": "eslint . --ext .js,.ts --fix",
+    "start": "nodemon server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "@binxhealth/pino-stackdriver": "^3.0.0",
+    "@fastify/autoload": "^6.3.1",
+    "@fastify/cors": "^11.1.0",
+    "@fastify/helmet": "^13.0.1",
+    "@fastify/multipart": "^9.2.1",
+    "@types/mongoose": "^5.11.96",
+    "eslint": "^9.34.0",
+    "fastify": "^5.6.0",
+    "mongoose": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "@typescript-eslint/eslint-plugin": "^8.42.0",
+    "@typescript-eslint/parser": "^8.42.0",
+    "nodemon": "^3.1.10",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.42.0"
+  }
+}
