@@ -28,13 +28,17 @@ export class FastifyServer {
         logger: {
           level: 'info',
         },
-        ignoreTrailingSlash: true,
+        routerOptions: {
+          ignoreTrailingSlash: true,
+        },
       }
     } else {
       console.info('Setting logging options with ALL levels.')
       return {
         logger: true,
-        ignoreTrailingSlash: true,
+        routerOptions: {
+          ignoreTrailingSlash: true,
+        },
       }
     }
   }

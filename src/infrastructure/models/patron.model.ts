@@ -46,7 +46,6 @@ const patronSchema = new Schema<IPatronDocument>({
 })
 
 // Indexes for better performance
-patronSchema.index({ email: 1 })
 patronSchema.index({ role: 1 })
 patronSchema.index({ endingDate: 1 })
 

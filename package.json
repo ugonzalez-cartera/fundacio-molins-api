@@ -1,10 +1,11 @@
 {
   "type": "module",
   "scripts": {
+    "build": "tsc",
+    "start": "tsx server.ts",
+    "dev": "tsx --watch server.ts",
     "lint": "eslint . --ext .js,.ts",
-    "lint:fix": "eslint . --ext .js,.ts --fix",
-    "start": "nodemon server.js",
-    "dev": "nodemon server.js"
+    "lint:fix": "eslint . --ext .js,.ts --fix"
   },
   "dependencies": {
     "@binxhealth/pino-stackdriver": "^3.0.0",
@@ -22,6 +23,7 @@
     "@typescript-eslint/eslint-plugin": "^8.42.0",
     "@typescript-eslint/parser": "^8.42.0",
     "nodemon": "^3.1.10",
+    "tsx": "^4.20.5",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.42.0"
   }
