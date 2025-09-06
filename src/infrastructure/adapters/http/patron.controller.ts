@@ -1,6 +1,10 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { PatronService } from '../../../application/services/patron.service.js'
 import { MongoosePatronRepository } from '../../repositories/patron.repository.js'
+import { CreatePatronUseCase } from '../../../application/use-cases/patron/create-patron.use-case.js'
+import { GetPatronUseCase } from '../../../application/use-cases/patron/get-patron.use-case.js'
+import { UpdatePatronUseCase } from '../../../application/use-cases/patron/update-patron.use-case.js'
+import { DeletePatronUseCase } from '../../../application/use-cases/patron/delete-patron.use-case.js'
+import { ListPatronsUseCase } from '../../../application/use-cases/patron/list-patrons.use-case.js'
 import {
   getErrorMessage,
   DomainError,
@@ -20,12 +24,29 @@ interface PatronParams {
   id: string
 }
 
+interface ListPatronsQuerystring {
+  page?: string
+  limit?: string
+  search?: string
+  role?: string
+  isActive?: string
+}
+
 export class PatronController {
-  private patronService: PatronService
+  private createPatronUseCase: CreatePatronUseCase
+  private getPatronUseCase: GetPatronUseCase
+  private updatePatronUseCase: UpdatePatronUseCase
+  private deletePatronUseCase: DeletePatronUseCase
+  private listPatronsUseCase: ListPatronsUseCase
 
   constructor() {
     const patronRepository = new MongoosePatronRepository()
-    this.patronService = new PatronService(patronRepository)
+
+    this.createPatronUseCase = new CreatePatronUseCase(patronRepository)
+    this.getPatronUseCase = new GetPatronUseCase(patronRepository)
+    this.updatePatronUseCase = new UpdatePatronUseCase(patronRepository)
+    this.deletePatronUseCase = new DeletePatronUseCase(patronRepository)
+    this.listPatronsUseCase = new ListPatronsUseCase(patronRepository)
   }
 
   // Helper method to handle errors consistently
@@ -50,8 +71,7 @@ export class PatronController {
     try {
       const { charge, name, email, role, renovationDate, endingDate } = request.body
 
-      // Validate and convert dates
-      const patron = await this.patronService.createPatron({
+      const patron = await this.createPatronUseCase.execute({
         charge,
         name,
         email,
@@ -73,14 +93,7 @@ export class PatronController {
   async getById(request: FastifyRequest<{ Params: PatronParams }>, reply: FastifyReply) {
     try {
       const { id } = request.params
-      const patron = await this.patronService.getPatronById(id)
-
-      if (!patron) {
-        return reply.code(404).send({
-          success: false,
-          error: 'Patron not found',
-        })
-      }
+      const patron = await this.getPatronUseCase.execute({ id })
 
       return reply.send({
         success: true,
@@ -91,14 +104,23 @@ export class PatronController {
     }
   }
 
-  // Get all patrons
-  async getAll(request: FastifyRequest, reply: FastifyReply) {
+  // Get all patrons with filtering and pagination
+  async getAll(
+    request: FastifyRequest<{ Querystring: ListPatronsQuerystring }>,
+    reply: FastifyReply,
+  ) {
     try {
-      const patrons = await this.patronService.getAllPatrons()
+      const { page, limit, role } = request.query
+
+      const result = await this.listPatronsUseCase.execute({
+        page: page ? parseInt(page, 10) : undefined,
+        limit: limit ? parseInt(limit, 10) : undefined,
+        role,
+      })
 
       return reply.send({
         success: true,
-        data: patrons,
+        data: result,
       })
     } catch (error) {
       return this.handleError(error, reply)
@@ -123,7 +145,10 @@ export class PatronController {
         processedUpdates.endingDate = new Date(updates.endingDate)
       }
 
-      const patron = await this.patronService.updatePatron(id, processedUpdates)
+      const patron = await this.updatePatronUseCase.execute({
+        id,
+        ...processedUpdates,
+      })
 
       return reply.send({
         success: true,
@@ -138,7 +163,7 @@ export class PatronController {
   async delete(request: FastifyRequest<{ Params: PatronParams }>, reply: FastifyReply) {
     try {
       const { id } = request.params
-      await this.patronService.deletePatron(id)
+      await this.deletePatronUseCase.execute({ id })
 
       return reply.code(204).send()
     } catch (error) {

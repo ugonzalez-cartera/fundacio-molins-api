@@ -2,9 +2,6 @@ import Fastify, { FastifyInstance } from 'fastify'
 import fastifyCors from '@fastify/cors'
 import fastifyHelmet from '@fastify/helmet'
 import fastifyMultipart from '@fastify/multipart'
-import autoload from '@fastify/autoload'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
 
 export class FastifyServer {
   private app: FastifyInstance
@@ -60,15 +57,14 @@ export class FastifyServer {
   }
 
   private setupRoutes(): void {
-    const __filename = fileURLToPath(import.meta.url)
-    const __dirname = dirname(__filename)
-
-    // Register all routes
-    this.app.register(autoload, {
-      dir: join(__dirname, '../adapters/http/routes'),
-      options: { prefix: '/api/v1' },
-      matchFilter: (path: string) => path.endsWith('.routes.js') || path.endsWith('.routes.ts'),
-    })
+    // Manually register routes instead of using autoload
+    // since we're running TypeScript directly with tsx
+    this.app.register(
+      async fastify => {
+        const patronRoutes = await import('./infrastructure/adapters/http/routes/patron.routes.js')
+        await fastify.register(patronRoutes.default, { prefix: '/api/v1' })
+      },
+    )
   }
 
   private setupHooks(): void {
@@ -94,7 +90,7 @@ export class FastifyServer {
   public async start(port = 3000, host = '0.0.0.0'): Promise<void> {
     try {
       await this.app.listen({ port, host })
-      console.log(`Server listening on http://${host}:${port}`)
+      // console.log(`Server listening on http://${host}:${port}`)
     } catch (error) {
       console.error('Error starting server:', error)
       process.exit(1)

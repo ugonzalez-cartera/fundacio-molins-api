@@ -1,5 +1,5 @@
-import type { IPatronRepository } from '../../domain/patron/patron.repository.js'
-import { Patron } from '../../domain/patron/patron.js'
+import type { IPatronRepository } from '../../domain/repositories/patron/patron.repository.js'
+import { Patron } from '../../domain/entities/patron/patron.entity.js'
 import { PatronModel, type IPatronDocument } from '../models/patron.model.js'
 import {
   getErrorMessage,
@@ -20,12 +20,21 @@ export class MongoosePatronRepository implements IPatronRepository {
     )
   }
 
-  async findById(id: string): Promise<Patron | null> {
+  async findAll(): Promise<Patron[]> {
     try {
-      const doc = await PatronModel.findById(id).exec()
+      const docs = await PatronModel.find().exec()
+      return docs.map(doc => this.toDomainEntity(doc))
+    } catch (error) {
+      throw new DatabaseError(`Failed to find all patrons: ${getErrorMessage(error)}`)
+    }
+  }
+
+  async findByEmail(email: string): Promise<Patron | null> {
+    try {
+      const doc = await PatronModel.findOne({ email }).exec()
       return doc ? this.toDomainEntity(doc) : null
     } catch (error) {
-      throw new DatabaseError(`Failed to find patron by id: ${getErrorMessage(error)}`)
+      throw new DatabaseError(`Failed to find patron by email: ${getErrorMessage(error)}`)
     }
   }
 
@@ -47,7 +56,7 @@ export class MongoosePatronRepository implements IPatronRepository {
     }
   }
 
-  async create(patronData: Omit<Patron, '_id'>): Promise<Patron> {
+  async create(patronData: Omit<Patron, 'id'>): Promise<Patron> {
     try {
       const doc = new PatronModel(patronData)
       const savedDoc = await doc.save()
@@ -81,6 +90,57 @@ export class MongoosePatronRepository implements IPatronRepository {
       return result !== null
     } catch (error) {
       throw new DatabaseError(`Failed to delete patron: ${getErrorMessage(error)}`)
+    }
+  }
+
+  async findBySearchTerm(searchTerm: string, options?: {
+    page?: number
+    limit?: number
+    role?: string
+    isActive?: boolean
+  }): Promise<{ patrons: Patron[], total: number }> {
+    try {
+      const page = options?.page || 1
+      const limit = options?.limit || 10
+      const skip = (page - 1) * limit
+
+      // Build query filter
+      const filter: Record<string, unknown> = {}
+
+      // Search in name, email, or charge
+      if (searchTerm) {
+        filter.$or = [
+          { name: { $regex: searchTerm, $options: 'i' } },
+          { email: { $regex: searchTerm, $options: 'i' } },
+          { charge: { $regex: searchTerm, $options: 'i' } },
+        ]
+      }
+
+      // Filter by role
+      if (options?.role) {
+        filter.role = options.role
+      }
+
+      // Filter by active status (based on endingDate)
+      if (options?.isActive !== undefined) {
+        if (options.isActive) {
+          filter.endingDate = { $gte: new Date() }
+        } else {
+          filter.endingDate = { $lt: new Date() }
+        }
+      }
+
+      const [docs, total] = await Promise.all([
+        PatronModel.find(filter).skip(skip).limit(limit).exec(),
+        PatronModel.countDocuments(filter),
+      ])
+
+      return {
+        patrons: docs.map(doc => this.toDomainEntity(doc)),
+        total,
+      }
+    } catch (error) {
+      throw new DatabaseError(`Failed to search patrons: ${getErrorMessage(error)}`)
     }
   }
 }

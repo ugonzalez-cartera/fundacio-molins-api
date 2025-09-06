@@ -1,7 +1,8 @@
 import type { IPatron } from './patron.interface.js'
 
-// Patron entity
-
+/**
+ * Patron Domain Entity
+ */
 export class Patron implements IPatron {
   name: string
   email: string

@@ -1,4 +1,4 @@
-import { FastifyServer } from './infrastructure/web/fastify-server.js'
+import { FastifyServer } from './fastify-server.js'
 import { DatabaseConnection } from './infrastructure/database/connection.js'
 import { ApplicationLifecycle } from './infrastructure/lifecycle/application-lifecycle.js'
 import { ConfigService } from './infrastructure/config/config.service.js'
@@ -29,21 +29,14 @@ export class Application {
     })
   }
 
-  public async start(): Promise<void> {
-    try {
-      // Connect to database
-      await this.dbConnection.connect(this.config.mongoUri)
+  async start(): Promise<void> {
+    // Skip database connection for now
+    // await this.dbConnection.connect(this.config.mongoUri)
+    console.log('Skipping database connection for testing...')
 
-      // Start the server
-      await this.server.start(this.config.port, this.config.host)
+    const { port, host } = this.config
 
-      console.log('🚀 Application started successfully!')
-      console.log(`📊 Environment: ${this.config.get().nodeEnv}`)
-      console.log(`🔗 API available at: http://${this.config.host}:${this.config.port}${this.config.apiPrefix}`)
-    } catch (error) {
-      console.error('❌ Failed to start application:', error)
-      process.exit(1)
-    }
+    await this.server.start(port, host)
   }
 }
 

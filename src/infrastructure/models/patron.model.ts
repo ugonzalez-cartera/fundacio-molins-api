@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose'
-import type { IPatron } from '../../domain/patron/patron.interface.js'
+import type { IPatron } from '../../domain/entities/patron/patron.interface.js'
 
 // Mongoose document interface
 export interface IPatronDocument extends IPatron, Document {

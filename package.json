@@ -2,8 +2,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "tsx server.ts",
-    "dev": "tsx --watch server.ts",
+    "start": "tsx index.ts",
+    "dev": "tsx --watch index.ts",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "eslint . --ext .js,.ts --fix"
   },
