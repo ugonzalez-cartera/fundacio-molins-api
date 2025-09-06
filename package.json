@@ -8,7 +8,6 @@
     "lint:fix": "eslint . --ext .js,.ts --fix"
   },
   "dependencies": {
-    "@binxhealth/pino-stackdriver": "^3.0.0",
     "@fastify/autoload": "^6.3.1",
     "@fastify/cors": "^11.1.0",
     "@fastify/helmet": "^13.0.1",

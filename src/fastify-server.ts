@@ -2,7 +2,6 @@ import Fastify, { FastifyInstance } from 'fastify'
 import fastifyCors from '@fastify/cors'
 import fastifyHelmet from '@fastify/helmet'
 import fastifyMultipart from '@fastify/multipart'
-import { createStream } from '@binxhealth/pino-stackdriver'
 
 export class FastifyServer {
   private app: FastifyInstance
@@ -26,7 +25,6 @@ export class FastifyServer {
         logger: {
           level: 'info',
         },
-        stream: createStream(),
         routerOptions: {
           ignoreTrailingSlash: true,
         },
