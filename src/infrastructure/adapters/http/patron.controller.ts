@@ -27,7 +27,6 @@ interface PatronParams {
 interface ListPatronsQuerystring {
   page?: string
   limit?: string
-  search?: string
   role?: string
 }
 
