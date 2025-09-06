@@ -1,96 +1,51 @@
-import mongoose from 'mongoose'
+import { FastifyServer } from './infrastructure/web/fastify-server.js'
+import { DatabaseConnection } from './infrastructure/database/connection.js'
+import { ApplicationLifecycle } from './infrastructure/lifecycle/application-lifecycle.js'
+import { ConfigService } from './infrastructure/config/config.service.js'
 
-import autoload from '@fastify/autoload'
-// import { verifyToken, authorize } from './api/token.handlers.js'
-// import { logTokens } from './services/authorization.service.js'
-// import initModels from './models/init.js'
-import { createStream } from '@binxhealth/pino-stackdriver'
+export class Application {
+  private server: FastifyServer
+  private dbConnection: DatabaseConnection
+  private lifecycle: ApplicationLifecycle
+  private config: ConfigService
 
-import Fastify from 'fastify'
-import fastifyCors from '@fastify/cors'
-import fastifyHelmet from '@fastify/helmet'
-import fastifyMultipart from '@fastify/multipart'
-
-// import config from './config.js'
-
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
-
-
-// Initialize Mongoose models.
-// initModels()
-
-// Fastify options
-let fastifyOptions
-if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
-  fastifyOptions = {
-    disableRequestLogging: true,
-    logger: {
-      level: 'info',
-      stream: createStream(),
-    },
-    ignoreTrailingSlash: true,
+  constructor() {
+    this.config = ConfigService.getInstance()
+    this.server = new FastifyServer()
+    this.dbConnection = DatabaseConnection.getInstance()
+    this.lifecycle = ApplicationLifecycle.getInstance()
+    this.setupShutdownHandlers()
   }
-} else {
-  console.info('Setting logging options with ALL levels.')
-  fastifyOptions = {
-    logger: true,
-    ignoreTrailingSlash: true,
+
+  private setupShutdownHandlers(): void {
+    // Register server shutdown handler
+    this.lifecycle.addShutdownHandler(async () => {
+      await this.server.stop()
+    })
+
+    // Register database shutdown handler
+    this.lifecycle.addShutdownHandler(async () => {
+      await this.dbConnection.disconnect()
+    })
   }
-}
 
-// Require the framework and instantiate it.
-export const fastify = Fastify(fastifyOptions)
+  public async start(): Promise<void> {
+    try {
+      // Connect to database
+      await this.dbConnection.connect(this.config.mongoUri)
 
-fastify
-  .register(fastifyCors, {})
-  .register(fastifyHelmet)
-  .register(fastifyMultipart, {
-    // Multipart is required to upload files.
-    limits: {
-      fieldNameSize: 100, // Max field name size in bytes.
-      fieldSize: 100000, // Max field value size in bytes.
-      fields: 10, // Max number of non-file fields.
-      fileSize: 4000000, // For multipart forms, the max file size. Max 4MB.
-      files: 5, // Max number of file fields.
-      headerPairs: 1000, // Max number of header key=>value pairs.
-    },
-  })
+      // Start the server
+      await this.server.start(this.config.port, this.config.host)
 
-fastify.ready(err => {
-  if (!err) {
-    if (process.env.NODE_ENV === 'development') {
-      // logTokens()
-      console.info('Tokens are logged.')
+      console.log('🚀 Application started successfully!')
+      console.log(`📊 Environment: ${this.config.get().nodeEnv}`)
+      console.log(`🔗 API available at: http://${this.config.host}:${this.config.port}${this.config.apiPrefix}`)
+    } catch (error) {
+      console.error('❌ Failed to start application:', error)
+      process.exit(1)
     }
-  } else {
-    console.error('Fastify init error', err)
   }
-})
-
-// Add global Hooks
-// fastify.addHook('onRequest', verifyToken)
-// fastify.addHook('onRequest', authorize)
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-// Register all services in 'api' folder (recursively).
-// fastify.register(autoload, {
-//   dir: join(__dirname, 'api'),
-//   options: { prefix: config.apiPrefix[process.env.NODE_ENV] },
-//   matchFilter: (p) => p.endsWith('.routes.js'),
-// })
-
-async function gracefulExit() {
-  console.info('  >> Graceful exit. Mongoose connection status:', mongoose.connection.readyState)
-  if (mongoose.connection.readyState === 1) {
-    // This means that the connection is established and we can safely close it.
-    console.info('     Closing Mongoose connection...')
-    await mongoose.connection.close()
-    console.info('     Mongoose DB connection is now disconnected through app termination.')
-  }
-  console.info('  >> Exiting process...')
-  process.exit(0)
 }
-process.on('SIGINT', gracefulExit).on('SIGTERM', gracefulExit).on('exit', gracefulExit)
+
+// Export instance for server.ts
+export const app = new Application()

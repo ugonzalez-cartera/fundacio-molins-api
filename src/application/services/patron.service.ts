@@ -1,11 +1,10 @@
-import { MongoosePatronRepository } from '../../infrastructure/repositories/patron.repository.js'
 import { Patron } from '../../domain/patron/patron.js'
 import type { IPatronRepository } from '../../domain/patron/patron.repository.js'
 
 export class PatronService {
   private patronRepository: IPatronRepository
 
-  constructor(patronRepository: IPatronRepository = new MongoosePatronRepository()) {
+  constructor(patronRepository: IPatronRepository) {
     this.patronRepository = patronRepository
   }
 
