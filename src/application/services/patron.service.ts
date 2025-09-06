@@ -46,12 +46,4 @@ export class PatronService {
   async deletePatron(id: string): Promise<boolean> {
     return await this.patronRepository.delete(id)
   }
-
-  async getPatronByEmail(email: string): Promise<Patron | null> {
-    return await this.patronRepository.findByEmail(email)
-  }
-
-  async getPatronsByRole(role: string): Promise<Patron[]> {
-    return await this.patronRepository.findByRole(role)
-  }
 }

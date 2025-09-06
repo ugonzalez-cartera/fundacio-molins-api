@@ -24,7 +24,7 @@ export class MongoosePatronRepository implements IPatronRepository {
     }
   }
 
-  async find(filter: Record<string, any> = {}): Promise<Patron[]> {
+  async find(filter: Record<string, unknown> = {}): Promise<Patron[]> {
     try {
       const docs = await PatronModel.find(filter).exec()
       return docs.map(doc => this.toDomainEntity(doc))
@@ -33,7 +33,7 @@ export class MongoosePatronRepository implements IPatronRepository {
     }
   }
 
-  async findOne(filter: Record<string, any>): Promise<Patron | null> {
+  async findOne(filter: Record<string, unknown>): Promise<Patron | null> {
     try {
       const doc = await PatronModel.findOne(filter).exec()
       return doc ? this.toDomainEntity(doc) : null
@@ -75,33 +75,6 @@ export class MongoosePatronRepository implements IPatronRepository {
       return result !== null
     } catch (error) {
       throw new Error(`Failed to delete patron: ${error.message}`)
-    }
-  }
-
-  // Domain-specific methods
-  async findByEmail(email: string): Promise<Patron | null> {
-    return this.findOne({ email: email.toLowerCase() })
-  }
-
-  async findByRole(role: string): Promise<Patron[]> {
-    return this.find({ role })
-  }
-
-  // Additional useful methods
-  async findExpiring(days: number): Promise<Patron[]> {
-    const futureDate = new Date()
-    futureDate.setDate(futureDate.getDate() + days)
-
-    return this.find({
-      endingDate: { $lte: futureDate, $gte: new Date() },
-    })
-  }
-
-  async countByRole(role: string): Promise<number> {
-    try {
-      return await PatronModel.countDocuments({ role }).exec()
-    } catch (error) {
-      throw new Error(`Failed to count patrons by role: ${error.message}`)
     }
   }
 }
