@@ -1,7 +1,7 @@
-import { FastifyServer } from './fastify-server.js'
-import { DatabaseConnection } from './infrastructure/database/connection.js'
-import { ApplicationLifecycle } from './infrastructure/lifecycle/application-lifecycle.js'
-import { ConfigService } from './infrastructure/config/config.service.js'
+import { FastifyServer } from '@/fastify-server.js'
+import { DatabaseConnection } from '@/infrastructure/database/connection.js'
+import { ApplicationLifecycle } from '@/infrastructure/lifecycle/application-lifecycle.js'
+import { ConfigService } from '@/infrastructure/config/config.service.js'
 
 export class Application {
   private server: FastifyServer
@@ -32,7 +32,7 @@ export class Application {
   async start(): Promise<void> {
     // Skip database connection for now
     // await this.dbConnection.connect(this.config.mongoUri)
-    console.log('Skipping database connection for testing...')
+    console.info('Skipping database connection for testing...')
 
     const { port, host } = this.config
 
@@ -40,5 +40,5 @@ export class Application {
   }
 }
 
-// Export instance for server.ts
+// Export instance for index.ts
 export const app = new Application()

@@ -1,6 +1,6 @@
-import { IPatronRepository } from '../../../domain/repositories/patron/patron.repository.js'
-import { DeletePatronCommand } from '../../dtos/patron/delete-patron.command.js'
-import { NotFoundError } from '../../../infrastructure/common/error-utils.js'
+import { IPatronRepository } from '@/domain/repositories/patron/patron.repository.js'
+import { NotFoundError } from '@/infrastructure/common/error-utils.js'
+import { DeletePatronCommand } from '@/application/dtos/patron/delete-patron.command.js'
 
 export class DeletePatronUseCase {
   constructor(private readonly patronRepository: IPatronRepository) {}

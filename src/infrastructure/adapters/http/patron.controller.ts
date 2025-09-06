@@ -29,7 +29,6 @@ interface ListPatronsQuerystring {
   limit?: string
   search?: string
   role?: string
-  isActive?: string
 }
 
 export class PatronController {

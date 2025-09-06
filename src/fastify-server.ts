@@ -2,6 +2,7 @@ import Fastify, { FastifyInstance } from 'fastify'
 import fastifyCors from '@fastify/cors'
 import fastifyHelmet from '@fastify/helmet'
 import fastifyMultipart from '@fastify/multipart'
+import { createStream } from '@binxhealth/pino-stackdriver'
 
 export class FastifyServer {
   private app: FastifyInstance
@@ -25,6 +26,7 @@ export class FastifyServer {
         logger: {
           level: 'info',
         },
+        stream: createStream(),
         routerOptions: {
           ignoreTrailingSlash: true,
         },
@@ -76,11 +78,45 @@ export class FastifyServer {
       if (!err) {
         if (process.env.NODE_ENV === 'development') {
           console.info('Fastify server ready in development mode.')
+          // Add a small delay to ensure all routes are registered
+          setTimeout(() => {
+            this.printRoutes()
+          }, 100)
         }
       } else {
         console.error('Fastify init error', err)
       }
     })
+  }
+
+  private printRoutes(): void {
+    try {
+      console.info(`\n🚀 Registered Routes (NODE_ENV: ${process.env.NODE_ENV || 'undefined'}):`)
+      console.info('='.repeat(50))
+
+      // Get all routes from Fastify
+      const routes = this.app.printRoutes({ commonPrefix: false })
+
+      if (routes.trim()) {
+        console.info(routes)
+      }
+
+      console.info('='.repeat(50))
+      console.info('')
+    } catch (error) {
+      console.info('❌ Error printing routes:', error)
+    }
+  }
+
+  private getMethodColor(method: string): string {
+    const colors = {
+      GET: '\x1b[32m',    // Green
+      POST: '\x1b[33m',   // Yellow
+      PUT: '\x1b[34m',    // Blue
+      DELETE: '\x1b[31m', // Red
+      PATCH: '\x1b[35m',  // Magenta
+    }
+    return colors[method as keyof typeof colors] || '\x1b[37m' // White default
   }
 
   public getInstance(): FastifyInstance {
@@ -90,7 +126,12 @@ export class FastifyServer {
   public async start(port = 3000, host = '0.0.0.0'): Promise<void> {
     try {
       await this.app.listen({ port, host })
-      // console.log(`Server listening on http://${host}:${port}`)
+      console.info(`Server listening on http://${host}:${port}`)
+
+      // Always print routes in development (when not production)
+      if (process.env.NODE_ENV !== 'production') {
+        this.printRoutes()
+      }
     } catch (error) {
       console.error('Error starting server:', error)
       process.exit(1)
@@ -100,7 +141,7 @@ export class FastifyServer {
   public async stop(): Promise<void> {
     try {
       await this.app.close()
-      console.log('Server stopped gracefully')
+      console.info('Server stopped gracefully')
     } catch (error) {
       console.error('Error stopping server:', error)
     }

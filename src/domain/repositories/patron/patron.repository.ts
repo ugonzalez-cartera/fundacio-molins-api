@@ -1,4 +1,4 @@
-import { Patron } from '../../entities/patron/patron.entity.js'
+import { Patron } from '@/domain/entities/patron/patron.entity.js'
 
 export interface IPatronRepository {
   find(filter: unknown): Promise<Patron[]>

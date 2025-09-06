@@ -1,8 +1,8 @@
-import { Patron } from '../../../domain/entities/patron/patron.entity.js'
-import { IPatronRepository } from '../../../domain/repositories/patron/patron.repository.js'
-import { PatronDto } from '../../dtos/patron/patron.dto.js'
-import { GetPatronQuery } from '../../dtos/patron/get-patron.query.js'
-import { NotFoundError } from '../../../infrastructure/common/error-utils.js'
+import { Patron } from '@/domain/entities/patron/patron.entity.js'
+import { IPatronRepository } from '@/domain/repositories/patron/patron.repository.js'
+import { PatronDto } from '@/application/dtos/patron/patron.dto.js'
+import { GetPatronQuery } from '@/application/dtos/patron/get-patron.query.js'
+import { NotFoundError } from '@/infrastructure/common/error-utils.js'
 
 export class GetPatronUseCase {
   constructor(private readonly patronRepository: IPatronRepository) {}

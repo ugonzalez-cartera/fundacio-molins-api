@@ -1,6 +1,7 @@
-import type { IPatronRepository } from '../../../domain/repositories/patron/patron.repository.js'
-import { Patron } from '../../../domain/entities/patron/patron.entity.js'
-import type { CreatePatronCommand, PatronDto } from '../../dtos/patron/patron.dto.js'
+import type { IPatronRepository } from '@/domain/repositories/patron/patron.repository.js'
+import { Patron } from '@/domain/entities/patron/patron.entity.js'
+import type {  PatronDto } from '@/application/dtos/patron/patron.dto.js'
+import type { CreatePatronCommand } from '@/application/dtos/patron/create-patron.command.js'
 
 export class CreatePatronUseCase {
   constructor(private patronRepository: IPatronRepository) {}

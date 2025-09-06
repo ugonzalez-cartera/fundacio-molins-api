@@ -1,8 +1,8 @@
-import { Patron } from '../../../domain/entities/patron/patron.entity.js'
-import { IPatronRepository } from '../../../domain/repositories/patron/patron.repository.js'
-import { PatronDto } from '../../dtos/patron/patron.dto.js'
-import { UpdatePatronCommand } from '../../dtos/patron/update-patron.command.js'
-import { NotFoundError, ValidationError } from '../../../infrastructure/common/error-utils.js'
+import { Patron } from '@/domain/entities/patron/patron.entity.js'
+import { IPatronRepository } from '@/domain/repositories/patron/patron.repository.js'
+import { PatronDto } from '@/application/dtos/patron/patron.dto.js'
+import { UpdatePatronCommand } from '@/application/dtos/patron/update-patron.command.js'
+import { NotFoundError, ValidationError } from '@/infrastructure/common/error-utils.js'
 
 export class UpdatePatronUseCase {
   constructor(private readonly patronRepository: IPatronRepository) {}

@@ -15,7 +15,7 @@ export class DatabaseConnection {
 
   public async connect(uri: string): Promise<void> {
     if (this.isConnected) {
-      console.log('Already connected to database')
+      console.info('Already connected to database')
       return
     }
 
@@ -23,7 +23,7 @@ export class DatabaseConnection {
       await mongoose.connect(uri)
 
       this.isConnected = true
-      console.log('Connected to MongoDB successfully')
+      console.info('Connected to MongoDB successfully')
 
       // Handle connection events
       mongoose.connection.on('error', error => {
@@ -31,12 +31,12 @@ export class DatabaseConnection {
       })
 
       mongoose.connection.on('disconnected', () => {
-        console.log('MongoDB disconnected')
+        console.info('MongoDB disconnected')
         this.isConnected = false
       })
 
       mongoose.connection.on('reconnected', () => {
-        console.log('MongoDB reconnected')
+        console.info('MongoDB reconnected')
         this.isConnected = true
       })
     } catch (error) {
@@ -53,7 +53,7 @@ export class DatabaseConnection {
     try {
       await mongoose.disconnect()
       this.isConnected = false
-      console.log('Disconnected from MongoDB')
+      console.info('Disconnected from MongoDB')
     } catch (error) {
       console.error('Error disconnecting from MongoDB:', error)
       throw error
