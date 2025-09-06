@@ -1,5 +1,6 @@
 import { Patron } from '../../domain/patron/patron.js'
 import type { IPatronRepository } from '../../domain/patron/patron.repository.js'
+import { NotFoundError } from '../../infrastructure/common/error-utils.js'
 
 export class PatronService {
   private patronRepository: IPatronRepository
@@ -38,11 +39,19 @@ export class PatronService {
     return await this.patronRepository.find()
   }
 
-  async updatePatron(id: string, updates: Partial<Patron>): Promise<Patron | null> {
-    return await this.patronRepository.update(id, updates)
+  async updatePatron(id: string, updates: Partial<Patron>): Promise<Patron> {
+    const patron = await this.patronRepository.update(id, updates)
+    if (!patron) {
+      throw new NotFoundError('Patron', id)
+    }
+    return patron
   }
 
   async deletePatron(id: string): Promise<boolean> {
-    return await this.patronRepository.delete(id)
+    const deleted = await this.patronRepository.delete(id)
+    if (!deleted) {
+      throw new NotFoundError('Patron', id)
+    }
+    return deleted
   }
 }

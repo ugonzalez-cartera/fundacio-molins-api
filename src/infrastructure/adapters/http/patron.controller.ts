@@ -1,6 +1,10 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { PatronService } from '../../../application/services/patron.service.js'
 import { MongoosePatronRepository } from '../../repositories/patron.repository.js'
+import {
+  getErrorMessage,
+  DomainError,
+} from '../../common/error-utils.js'
 
 // DTOs for HTTP layer
 interface CreatePatronRequest {
@@ -24,6 +28,23 @@ export class PatronController {
     this.patronService = new PatronService(patronRepository)
   }
 
+  // Helper method to handle errors consistently
+  private handleError(error: unknown, reply: FastifyReply) {
+    if (error instanceof DomainError) {
+      return reply.code(error.statusCode).send({
+        success: false,
+        error: error.message,
+        code: error.code,
+      })
+    }
+
+    // Default to 500 for unknown errors
+    return reply.code(500).send({
+      success: false,
+      error: getErrorMessage(error),
+    })
+  }
+
   // Create patron
   async create(request: FastifyRequest<{ Body: CreatePatronRequest }>, reply: FastifyReply) {
     try {
@@ -44,10 +65,7 @@ export class PatronController {
         data: patron,
       })
     } catch (error) {
-      return reply.code(400).send({
-        success: false,
-        error: error.message,
-      })
+      return this.handleError(error, reply)
     }
   }
 
@@ -69,10 +87,7 @@ export class PatronController {
         data: patron,
       })
     } catch (error) {
-      return reply.code(500).send({
-        success: false,
-        error: error.message,
-      })
+      return this.handleError(error, reply)
     }
   }
 
@@ -86,10 +101,7 @@ export class PatronController {
         data: patrons,
       })
     } catch (error) {
-      return reply.code(500).send({
-        success: false,
-        error: error.message,
-      })
+      return this.handleError(error, reply)
     }
   }
 
@@ -113,22 +125,12 @@ export class PatronController {
 
       const patron = await this.patronService.updatePatron(id, processedUpdates)
 
-      if (!patron) {
-        return reply.code(404).send({
-          success: false,
-          error: 'Patron not found',
-        })
-      }
-
       return reply.send({
         success: true,
         data: patron,
       })
     } catch (error) {
-      return reply.code(400).send({
-        success: false,
-        error: error.message,
-      })
+      return this.handleError(error, reply)
     }
   }
 
@@ -136,21 +138,11 @@ export class PatronController {
   async delete(request: FastifyRequest<{ Params: PatronParams }>, reply: FastifyReply) {
     try {
       const { id } = request.params
-      const deleted = await this.patronService.deletePatron(id)
-
-      if (!deleted) {
-        return reply.code(404).send({
-          success: false,
-          error: 'Patron not found',
-        })
-      }
+      await this.patronService.deletePatron(id)
 
       return reply.code(204).send()
     } catch (error) {
-      return reply.code(500).send({
-        success: false,
-        error: error.message,
-      })
+      return this.handleError(error, reply)
     }
   }
 }

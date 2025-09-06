@@ -1,6 +1,11 @@
 import type { IPatronRepository } from '../../domain/patron/patron.repository.js'
 import { Patron } from '../../domain/patron/patron.js'
 import { PatronModel, type IPatronDocument } from '../models/patron.model.js'
+import {
+  getErrorMessage,
+  DatabaseError,
+  ConflictError,
+} from '../common/error-utils.js'
 
 export class MongoosePatronRepository implements IPatronRepository {
   // Convert Mongoose document to domain entity
@@ -20,7 +25,7 @@ export class MongoosePatronRepository implements IPatronRepository {
       const doc = await PatronModel.findById(id).exec()
       return doc ? this.toDomainEntity(doc) : null
     } catch (error) {
-      throw new Error(`Failed to find patron by id: ${error.message}`)
+      throw new DatabaseError(`Failed to find patron by id: ${getErrorMessage(error)}`)
     }
   }
 
@@ -29,7 +34,7 @@ export class MongoosePatronRepository implements IPatronRepository {
       const docs = await PatronModel.find(filter).exec()
       return docs.map(doc => this.toDomainEntity(doc))
     } catch (error) {
-      throw new Error(`Failed to find patrons: ${error.message}`)
+      throw new DatabaseError(`Failed to find patrons: ${getErrorMessage(error)}`)
     }
   }
 
@@ -38,7 +43,7 @@ export class MongoosePatronRepository implements IPatronRepository {
       const doc = await PatronModel.findOne(filter).exec()
       return doc ? this.toDomainEntity(doc) : null
     } catch (error) {
-      throw new Error(`Failed to find patron: ${error.message}`)
+      throw new DatabaseError(`Failed to find patron: ${getErrorMessage(error)}`)
     }
   }
 
@@ -48,10 +53,11 @@ export class MongoosePatronRepository implements IPatronRepository {
       const savedDoc = await doc.save()
       return this.toDomainEntity(savedDoc)
     } catch (error) {
-      if (error.code === 11000) {
-        throw new Error('Patron with this email already exists')
+      // Check for duplicate key error (MongoDB error code 11000)
+      if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
+        throw new ConflictError('Patron with this email already exists')
       }
-      throw new Error(`Failed to create patron: ${error.message}`)
+      throw new DatabaseError(`Failed to create patron: ${getErrorMessage(error)}`)
     }
   }
 
@@ -65,7 +71,7 @@ export class MongoosePatronRepository implements IPatronRepository {
 
       return doc ? this.toDomainEntity(doc) : null
     } catch (error) {
-      throw new Error(`Failed to update patron: ${error.message}`)
+      throw new DatabaseError(`Failed to update patron: ${getErrorMessage(error)}`)
     }
   }
 
@@ -74,7 +80,7 @@ export class MongoosePatronRepository implements IPatronRepository {
       const result = await PatronModel.findByIdAndDelete(id).exec()
       return result !== null
     } catch (error) {
-      throw new Error(`Failed to delete patron: ${error.message}`)
+      throw new DatabaseError(`Failed to delete patron: ${getErrorMessage(error)}`)
     }
   }
 }
