@@ -57,6 +57,15 @@ export class FastifyServer {
   }
 
   private setupRoutes(): void {
+    // Health check endpoint.
+    this.app.get('/healthz', async (request, reply) => {
+      reply.send({
+        status: 'ok',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+      })
+    })
+
     // Manually register routes instead of using autoload
     // since we're running TypeScript directly with tsx
     this.app.register(
