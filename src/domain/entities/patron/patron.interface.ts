@@ -1,9 +1,6 @@
-export interface IPatron {
+import type { IUser } from '../user/user.interface.js'
+export interface IPatron extends IUser {
   charge: string
-  givenName: string
-  familyName: string
-  email: string
-  role: string
   renovationDate: Date
   endingDate: Date
 }

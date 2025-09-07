@@ -1,9 +1,8 @@
 import type { IPatron } from './patron.interface.js'
+import { User } from '../user/user.entity.js'
 
-/**
- * Patron Domain Entity
- */
-export class Patron implements IPatron {
+// Patron Domain Entity
+export class Patron extends User implements IPatron {
   givenName: string
   familyName: string
   email: string
@@ -21,6 +20,7 @@ export class Patron implements IPatron {
     renovationDate: Date,
     endingDate: Date,
   ) {
+    super(email, givenName, familyName, role)
     this.familyName = familyName
     this.givenName = givenName
     this.email = email
