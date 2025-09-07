@@ -39,9 +39,9 @@ export class ApplicationLifecycle {
       process.exit(0)
     }
 
-    process.on('SIGINT', gracefulExit)
-    process.on('SIGTERM', gracefulExit)
-    process.on('exit', gracefulExit)
+    process.on('SIGINT', gracefulExit) // Handle Ctrl+C
+    process.on('SIGTERM', gracefulExit) // Handle termination signals
+    process.on('exit', gracefulExit) // Handle normal exit
   }
 
   private async handleMongooseShutdown(): Promise<void> {
