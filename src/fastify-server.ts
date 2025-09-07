@@ -2,6 +2,7 @@ import Fastify, { FastifyInstance } from 'fastify'
 import fastifyCors from '@fastify/cors'
 import fastifyHelmet from '@fastify/helmet'
 import fastifyMultipart from '@fastify/multipart'
+import chalk from 'chalk'
 
 export class FastifyServer {
   private app: FastifyInstance
@@ -57,7 +58,7 @@ export class FastifyServer {
   }
 
   private setupRoutes(): void {
-    // Health check endpoint.
+    // Health check endpoint
     this.app.get('/healthz', async (request, reply) => {
       reply.send({
         status: 'ok',
@@ -98,32 +99,23 @@ export class FastifyServer {
 
   private printRoutes(): void {
     try {
-      console.info(`\n🚀 Registered Routes (NODE_ENV: ${process.env.NODE_ENV || 'undefined'}):`)
-      console.info('='.repeat(50))
+      console.info(chalk.white(`\n🚀 Registered Routes (NODE_ENV: ${process.env.NODE_ENV || 'undefined'}):`))
+      console.info(chalk.yellow('='.repeat(50)))
 
-      // Get all routes from Fastify
       const routes = this.app.printRoutes({ commonPrefix: false })
 
       if (routes.trim()) {
-        console.info(routes)
+        // Print each line of routes in green.
+        routes.split('\n').forEach(line => {
+          console.info(chalk.green(line))
+        })
       }
 
-      console.info('='.repeat(50))
+      console.info(chalk.yellow('='.repeat(50)))
       console.info('')
     } catch (error) {
-      console.info('❌ Error printing routes:', error)
+      console.info(chalk.red('❌ Error printing routes:'), error)
     }
-  }
-
-  private getMethodColor(method: string): string {
-    const colors = {
-      GET: '\x1b[32m',    // Green
-      POST: '\x1b[33m',   // Yellow
-      PUT: '\x1b[34m',    // Blue
-      DELETE: '\x1b[31m', // Red
-      PATCH: '\x1b[35m',  // Magenta
-    }
-    return colors[method as keyof typeof colors] || '\x1b[37m' // White default
   }
 
   public getInstance(): FastifyInstance {
