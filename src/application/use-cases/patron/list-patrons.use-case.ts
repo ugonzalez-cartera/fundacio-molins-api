@@ -39,7 +39,8 @@ export class ListPatronsUseCase {
     return {
       id: patron._id || patron.id || '',
       charge: patron.charge,
-      name: patron.name,
+      givenName: patron.givenName,
+      familyName: patron.familyName,
       email: patron.email,
       role: patron.role,
       renovationDate: patron.renovationDate,

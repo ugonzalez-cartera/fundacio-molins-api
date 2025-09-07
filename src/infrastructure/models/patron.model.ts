@@ -10,7 +10,12 @@ export interface IPatronDocument extends IPatron, Document {
 
 // Mongoose schema
 const patronSchema = new Schema<IPatronDocument>({
-  name: {
+  givenName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  familyName: {
     type: String,
     required: true,
     trim: true,

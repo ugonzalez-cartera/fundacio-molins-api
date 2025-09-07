@@ -12,7 +12,8 @@ export class MongoosePatronRepository implements IPatronRepository {
   private toDomainEntity(doc: IPatronDocument): Patron {
     return new Patron(
       doc.charge,
-      doc.name,
+      doc.givenName,
+      doc.familyName,
       doc.email,
       doc.role,
       doc.renovationDate,
@@ -107,10 +108,11 @@ export class MongoosePatronRepository implements IPatronRepository {
       // Build query filter
       const filter: Record<string, unknown> = {}
 
-      // Search in name, email, or charge
+      // Search in givenName, familyName, email, or charge
       if (searchTerm) {
         filter.$or = [
-          { name: { $regex: searchTerm, $options: 'i' } },
+          { givenName: { $regex: searchTerm, $options: 'i' } },
+          { familyName: { $regex: searchTerm, $options: 'i' } },
           { email: { $regex: searchTerm, $options: 'i' } },
           { charge: { $regex: searchTerm, $options: 'i' } },
         ]

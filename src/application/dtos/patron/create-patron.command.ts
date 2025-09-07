@@ -1,6 +1,7 @@
 export interface CreatePatronCommand {
   charge: string
-  name: string
+  givenName: string
+  familyName: string
   email: string
   role: string
   renovationDate: Date

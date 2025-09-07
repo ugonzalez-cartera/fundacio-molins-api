@@ -31,7 +31,7 @@ export class Application {
 
   async start(): Promise<void> {
     // Skip database connection for now
-    // await this.dbConnection.connect(this.config.mongoUri)
+    await this.dbConnection.connect(this.config.mongoUri)
     console.info('Skipping database connection for testing...')
 
     const { port, host } = this.config

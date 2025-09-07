@@ -1,7 +1,8 @@
 export interface PatronDto {
   id: string
   charge: string
-  name: string
+  givenName: string
+  familyName: string
   email: string
   role: string
   renovationDate: Date

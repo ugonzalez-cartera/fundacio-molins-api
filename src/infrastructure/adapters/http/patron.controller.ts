@@ -13,7 +13,8 @@ import {
 // DTOs for HTTP layer
 interface CreatePatronRequest {
   charge: string
-  name: string
+  givenName: string
+  familyName: string
   email: string
   role: string
   renovationDate: string // Will be converted to Date
@@ -67,21 +68,27 @@ export class PatronController {
   // Create patron
   async create(request: FastifyRequest<{ Body: CreatePatronRequest }>, reply: FastifyReply) {
     try {
-      const { charge, name, email, role, renovationDate, endingDate } = request.body
+      const { charge,
+        givenName,
+        familyName,
+        email,
+        role,
+        renovationDate,
+        endingDate,
+      } = request.body
 
       const patron = await this.createPatronUseCase.execute({
         charge,
-        name,
+        givenName,
+        familyName,
         email,
         role,
         renovationDate: new Date(renovationDate),
         endingDate: new Date(endingDate),
       })
 
-      return reply.code(201).send({
-        success: true,
-        data: patron,
-      })
+
+      return patron
     } catch (error) {
       return this.handleError(error, reply)
     }

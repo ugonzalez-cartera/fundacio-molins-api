@@ -4,7 +4,8 @@ import type { IPatron } from './patron.interface.js'
  * Patron Domain Entity
  */
 export class Patron implements IPatron {
-  name: string
+  givenName: string
+  familyName: string
   email: string
   charge: string
   role: string
@@ -13,13 +14,15 @@ export class Patron implements IPatron {
 
   constructor(
     charge: string,
-    name: string,
+    givenName: string,
+    familyName: string,
     email: string,
     role: string,
     renovationDate: Date,
     endingDate: Date,
   ) {
-    this.name = name
+    this.familyName = familyName
+    this.givenName = givenName
     this.email = email
     this.charge = charge
     this.role = role

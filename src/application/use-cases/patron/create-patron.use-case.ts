@@ -10,7 +10,8 @@ export class CreatePatronUseCase {
     // Create domain entity with business logic validation
     const patron = new Patron(
       command.charge,
-      command.name,
+      command.givenName,
+      command.familyName,
       command.email,
       command.role,
       command.renovationDate,
@@ -34,7 +35,8 @@ export class CreatePatronUseCase {
     return {
       id: patron._id || patron.id || '',
       charge: patron.charge,
-      name: patron.name,
+      givenName: patron.givenName,
+      familyName: patron.familyName,
       email: patron.email,
       role: patron.role,
       renovationDate: patron.renovationDate,
