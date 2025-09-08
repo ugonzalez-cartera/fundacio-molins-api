@@ -94,9 +94,8 @@ export class Patron implements IPatron {
 
   canBeRenewed(): boolean {
     const now = new Date()
-    const renewalPeriod = new Date(this._endingDate)
-    renewalPeriod.setFullYear(renewalPeriod.getFullYear() - 4) // Max 4 years
-    return now >= renewalPeriod
+    // Can be renewed if the membership has ended
+    return now > this._endingDate
   }
 
   renew(newEndingDate: Date): Patron {

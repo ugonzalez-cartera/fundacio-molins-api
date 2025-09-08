@@ -2,9 +2,9 @@ import { ValidationError } from '../../../common/errors.js'
 
 const EMAIL_REGEX = new RegExp([
   '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@',
-  '[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?',
-  '(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$',
-].join(''))
+  '[a-zA-Z0-9À-ÿĀ-žА-я](?:[a-zA-Z0-9À-ÿĀ-žА-я-]{0,61}[a-zA-Z0-9À-ÿĀ-žА-я])?',
+  '(?:\\.[a-zA-Z0-9À-ÿĀ-žА-я](?:[a-zA-Z0-9À-ÿĀ-žА-я-]{0,61}[a-zA-Z0-9À-ÿĀ-žА-я])?)*$',
+].join(''), 'u')
 
 export class Email {
   private readonly value: string
