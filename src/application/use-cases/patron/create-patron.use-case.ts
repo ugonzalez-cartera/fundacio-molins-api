@@ -8,15 +8,15 @@ export class CreatePatronUseCase {
 
   async execute(command: CreatePatronCommand): Promise<PatronDto> {
     // Create domain entity with business logic validation
-    const patron = new Patron(
-      command.charge,
-      command.givenName,
-      command.familyName,
-      command.email,
-      command.role,
-      command.renovationDate,
-      command.endingDate,
-    )
+    const patron = Patron.create({
+      email: command.email,
+      givenName: command.givenName,
+      familyName: command.familyName,
+      role: command.role,
+      charge: command.charge,
+      renovationDate: command.renovationDate,
+      endingDate: command.endingDate,
+    })
 
     // Check if patron with email already exists
     const existingPatron = await this.patronRepository.findByEmail(command.email)

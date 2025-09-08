@@ -10,15 +10,16 @@ import {
 export class MongoosePatronRepository implements IPatronRepository {
   // Convert Mongoose document to domain entity
   private toDomainEntity(doc: IPatronDocument): Patron {
-    return new Patron(
-      doc.charge,
-      doc.givenName,
-      doc.familyName,
-      doc.email,
-      doc.role,
-      doc.renovationDate,
-      doc.endingDate,
-    )
+    return Patron.fromPrimitives({
+      id: doc._id?.toString(),
+      email: doc.email,
+      givenName: doc.givenName,
+      familyName: doc.familyName,
+      role: doc.role,
+      charge: doc.charge,
+      renovationDate: doc.renovationDate,
+      endingDate: doc.endingDate,
+    })
   }
 
   async findAll(): Promise<Patron[]> {
@@ -57,9 +58,10 @@ export class MongoosePatronRepository implements IPatronRepository {
     }
   }
 
-  async create(patronData: Omit<Patron, 'id'>): Promise<Patron> {
+  async create(patron: Patron): Promise<Patron> {
     try {
-      const doc = new PatronModel(patronData)
+      const primitives = patron.toPrimitives()
+      const doc = new PatronModel(primitives)
       const savedDoc = await doc.save()
       return this.toDomainEntity(savedDoc)
     } catch (error) {
