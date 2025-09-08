@@ -1,14 +1,14 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { MongoosePatronRepository } from '../../repositories/patron.repository.js'
-import { CreatePatronUseCase } from '../../../application/use-cases/patron/create-patron.use-case.js'
-import { GetPatronUseCase } from '../../../application/use-cases/patron/get-patron.use-case.js'
-import { UpdatePatronUseCase } from '../../../application/use-cases/patron/update-patron.use-case.js'
-import { DeletePatronUseCase } from '../../../application/use-cases/patron/delete-patron.use-case.js'
-import { ListPatronsUseCase } from '../../../application/use-cases/patron/list-patrons.use-case.js'
+import { MongoosePatronRepository } from '@/infrastructure/repositories/patron.repository.js'
+import { CreatePatronUseCase } from '@/application/use-cases/patron/create-patron.use-case.js'
+import { GetPatronUseCase } from '@/application/use-cases/patron/get-patron.use-case.js'
+import { UpdatePatronUseCase } from '@/application/use-cases/patron/update-patron.use-case.js'
+import { DeletePatronUseCase } from '@/application/use-cases/patron/delete-patron.use-case.js'
+import { ListPatronsUseCase } from '@/application/use-cases/patron/list-patrons.use-case.js'
 import {
   getErrorMessage,
   DomainError,
-} from '../../common/error-utils.js'
+} from '@/infrastructure/common/error-utils.js'
 
 // DTOs for HTTP layer
 interface CreatePatronRequest {
@@ -86,7 +86,6 @@ export class PatronController {
         renovationDate: new Date(renovationDate),
         endingDate: new Date(endingDate),
       })
-
 
       return patron
     } catch (error) {

@@ -20,22 +20,23 @@ export function isError(error: unknown): error is Error {
   return error instanceof Error
 }
 
-// Custom error classes for domain-specific errors
-export class DomainError extends Error {
-  constructor(
-    message: string,
-    public readonly code: string,
-    public readonly statusCode = 400,
-  ) {
-    super(message)
-    this.name = 'DomainError'
-  }
-}
+// Re-export domain errors for use in infrastructure layer
+export {
+  DomainError,
+  ValidationError,
+  BusinessRuleError,
+} from '@/domain/common/errors.js'
 
-export class ValidationError extends DomainError {
-  constructor(message: string) {
-    super(message, 'VALIDATION_ERROR', 400)
-    this.name = 'ValidationError'
+// Infrastructure-specific error classes that extend domain errors
+import { DomainError } from '@/domain/common/errors.js'
+
+export class DatabaseError extends DomainError {
+  constructor(message: string, originalError?: Error) {
+    super(message, 'DATABASE_ERROR', 500)
+    this.name = 'DatabaseError'
+    if (originalError) {
+      this.stack = originalError.stack
+    }
   }
 }
 
@@ -53,15 +54,5 @@ export class ConflictError extends DomainError {
   constructor(message: string) {
     super(message, 'CONFLICT', 409)
     this.name = 'ConflictError'
-  }
-}
-
-export class DatabaseError extends DomainError {
-  constructor(message: string, originalError?: Error) {
-    super(message, 'DATABASE_ERROR', 500)
-    this.name = 'DatabaseError'
-    if (originalError) {
-      this.stack = originalError.stack
-    }
   }
 }

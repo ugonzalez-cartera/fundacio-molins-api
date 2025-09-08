@@ -1,4 +1,4 @@
-import { ValidationError } from '@/infrastructure/common/error-utils.js'
+import { ValidationError } from '../../../common/errors.js'
 
 const EMAIL_REGEX = new RegExp([
   '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@',

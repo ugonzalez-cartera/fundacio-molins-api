@@ -1,13 +1,14 @@
 import type { IPatron } from './patron.interface.js'
 import { Email, PatronName, Charge } from './value-objects/index.js'
 import { Role } from '../user/value-objects/role.js'
-import { ValidationError } from '../../../infrastructure/common/error-utils.js'
+import { ValidationError } from '../../common/errors.js'
 
 /**
  * Patron Domain Entity - Aggregate Root
  * Represents a board member or patron of the foundation
  */
 export class Patron implements IPatron {
+  private _id?: string
   private _email: Email
   private _givenName: PatronName
   private _familyName: PatronName
@@ -24,7 +25,9 @@ export class Patron implements IPatron {
     charge: Charge,
     renovationDate: Date,
     endingDate: Date,
+    id?: string,
   ) {
+    this._id = id
     this._email = email
     this._givenName = givenName
     this._familyName = familyName
@@ -73,6 +76,7 @@ export class Patron implements IPatron {
       new Charge(data.charge),
       data.renovationDate,
       data.endingDate,
+      data.id,
     )
   }
 
@@ -112,6 +116,10 @@ export class Patron implements IPatron {
   }
 
   // Getters for all fields
+
+  get id(): string | undefined {
+    return this._id
+  }
 
   get email(): string {
     return this._email.getValue()
@@ -155,7 +163,7 @@ export class Patron implements IPatron {
   }
 
   set role(value: string) {
-    this._role = value
+    this._role = new Role(value)
   }
 
   set charge(value: string) {

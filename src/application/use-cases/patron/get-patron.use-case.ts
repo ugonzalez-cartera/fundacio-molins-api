@@ -17,9 +17,9 @@ export class GetPatronUseCase {
     return this.toDto(patron)
   }
 
-  private toDto(patron: Patron & { _id?: string; id?: string }): PatronDto {
+  private toDto(patron: Patron): PatronDto {
     return {
-      id: patron._id || patron.id || '',
+      id: patron.id || '',
       charge: patron.charge,
       givenName: patron.givenName,
       familyName: patron.familyName,

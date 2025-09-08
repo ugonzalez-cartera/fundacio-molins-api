@@ -1,4 +1,4 @@
-import { ValidationError } from '@/infrastructure/common/error-utils.js'
+import { ValidationError } from '../../../common/errors.js'
 
 export class PatronName {
   private readonly value: string

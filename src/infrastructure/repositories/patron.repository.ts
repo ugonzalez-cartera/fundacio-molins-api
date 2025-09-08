@@ -40,9 +40,16 @@ export class MongoosePatronRepository implements IPatronRepository {
     }
   }
 
-  async find(filter: Record<string, unknown> = {}): Promise<Patron[]> {
+  async find(options: {
+    filter: Record<string, unknown>
+    limit: number
+    page: number
+  }): Promise<Patron[]> {
     try {
-      const docs = await PatronModel.find(filter).exec()
+      const { filter, limit, page } = options
+      const skip = ((page || 1) - 1) * (limit || 10)
+
+      const docs = await PatronModel.find(filter).skip(skip).limit(limit).exec()
       return docs.map(doc => this.toDomainEntity(doc))
     } catch (error) {
       throw new DatabaseError(`Failed to find patrons: ${getErrorMessage(error)}`)
