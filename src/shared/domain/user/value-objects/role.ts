@@ -1,5 +1,4 @@
-import { ValidationError } from '../../../../shared/errors.js'
-
+import { ValidationError } from '@/shared/errors.js'
 
 export class Role {
   private role: string
@@ -9,12 +8,9 @@ export class Role {
   }
 
   private validateRole(role: string): void {
-    enum RoleEnum {
-      ADMIN = 'admin',
-      PATRON = 'patron',
-    }
-    const validRoles = [RoleEnum.ADMIN, RoleEnum.PATRON]
-    if (!validRoles.includes(role as RoleEnum)) {
+    type Role = 'admin' | 'patron'
+    const validRoles: Role[] = ['admin', 'patron']
+    if (!validRoles.includes(role as Role)) {
       throw new ValidationError(`Invalid role: ${role}`)
     }
   }

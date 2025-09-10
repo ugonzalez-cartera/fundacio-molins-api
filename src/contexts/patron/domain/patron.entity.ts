@@ -1,6 +1,6 @@
 import type { IPatron } from '@/contexts/patron/domain/patron.interface.js'
 import { Position } from '@/contexts/patron/domain/value-objects/position.js'
-import { User } from '@/contexts/user/domain/user.entity.js'
+import { User } from '@/shared/domain/user/user.entity.js'
 
 export class Patron extends User implements IPatron {
   private _position: Position

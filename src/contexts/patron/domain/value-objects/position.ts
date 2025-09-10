@@ -5,7 +5,7 @@ export class Position {
 
   constructor(value: string) {
     this.validateCharge(value)
-    this.value = this.normalize(value)
+    this.value = value.trim()
   }
 
   private validateCharge(value: string): void {
@@ -33,44 +33,7 @@ export class Position {
     }
   }
 
-  private normalize(value: string): string {
-    return value
-      .trim()
-      .replace(/\s+/g, ' ')
-      .split(' ')
-      .map((word, index) => {
-        // Don't capitalize certain prepositions unless they're the first word
-        const lowercaseWords = ['of', 'the', 'and', 'or', 'de', 'del', 'la', 'el', 'y', 'e', 'o', 'u', 'en', 'con', 'por', 'para']
-        if (index > 0 && lowercaseWords.includes(word.toLowerCase())) {
-          return word.toLowerCase()
-        }
-        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-      })
-      .join(' ')
-  }
-
   getValue(): string {
     return this.value
-  }
-
-  equals(other: Position): boolean {
-    return this.value === other.value
-  }
-
-  toString(): string {
-    return this.value
-  }
-
-  // Foundation-specific business logic
-  getAbbreviation(): string {
-    const excludeWords = ['of', 'the', 'and', 'or', 'de', 'del', 'la', 'el', 'y', 'e', 'o', 'u', 'en', 'con', 'por', 'para']
-    return this.value
-      .split(' ')
-      .filter(word => {
-        const cleanWord = word.replace(/[()]/g, '').toLowerCase()
-        return word.length > 2 && !excludeWords.includes(cleanWord)
-      })
-      .map(word => word.charAt(0).toUpperCase())
-      .join('')
   }
 }

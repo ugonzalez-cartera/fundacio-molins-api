@@ -1,9 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose'
 import type { IPatron } from '@/contexts/patron/domain/patron.interface.js'
 
-// Mongoose document interface
 export interface IPatronDocument extends IPatron, Document {
-  id: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -50,9 +48,4 @@ const patronSchema = new Schema<IPatronDocument>({
   collection: 'patrons',
 })
 
-// Indexes for better performance
-patronSchema.index({ role: 1 })
-patronSchema.index({ endingDate: 1 })
-
-// Export the model
 export const PatronModel = mongoose.model<IPatronDocument>('Patron', patronSchema)

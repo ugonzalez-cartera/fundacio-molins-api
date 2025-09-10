@@ -71,12 +71,4 @@ export class GivenName {
       .map(word => word.charAt(0).toUpperCase())
       .join('')
   }
-
-  equals(other: GivenName): boolean {
-    return this.value === other.value
-  }
-
-  toString(): string {
-    return this.value
-  }
 }

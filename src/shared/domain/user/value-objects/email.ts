@@ -1,4 +1,4 @@
-import { ValidationError } from '../../../../shared/errors.js'
+import { ValidationError } from '@/shared/errors.js'
 
 const EMAIL_REGEX = new RegExp([
   '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@',
@@ -59,13 +59,5 @@ export class Email {
 
   getLocalPart(): string {
     return this.value.split('@')[0]
-  }
-
-  equals(other: Email): boolean {
-    return this.value === other.value
-  }
-
-  toString(): string {
-    return this.value
   }
 }
