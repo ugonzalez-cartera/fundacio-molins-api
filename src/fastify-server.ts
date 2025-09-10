@@ -9,7 +9,7 @@ export class FastifyServer {
 
   constructor() {
     this.app = this.createServer()
-    this.setupMiddleware()
+    this.setupPlugins()
     this.setupRoutes()
     this.setupHooks()
   }
@@ -41,7 +41,7 @@ export class FastifyServer {
     }
   }
 
-  private setupMiddleware(): void {
+  private setupPlugins(): void {
     this.app
       .register(fastifyCors, {})
       .register(fastifyHelmet)
