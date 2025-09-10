@@ -1,6 +1,6 @@
 export interface UpdatePatronCommand {
   id: string
-  charge?: string
+  position?: string
   givenName?: string
   familyName?: string
   email?: string

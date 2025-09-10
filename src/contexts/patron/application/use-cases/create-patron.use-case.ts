@@ -1,7 +1,8 @@
 import type { IPatronRepository } from '@/contexts/patron/domain/patron.repository.js'
 import { Patron } from '@/contexts/patron/domain/patron.entity.js'
-import type {  PatronDto } from '@/contexts/patron/application/dtos/patron/patron.dto.js'
-import type { CreatePatronCommand } from '@/contexts/patron/application/dtos/patron/create-patron.command.js'
+import type {  PatronDto } from '@/contexts/patron/application/dtos/patron.dto.js'
+import type { CreatePatronCommand } from '@/contexts/patron/application/dtos/create-patron.command.js'
+import { ConflictError } from '@/shared/errors.js'
 
 export class CreatePatronUseCase {
   constructor(private patronRepository: IPatronRepository) {}
@@ -13,7 +14,7 @@ export class CreatePatronUseCase {
       givenName: command.givenName,
       familyName: command.familyName,
       role: command.role,
-      charge: command.charge,
+      position: command.position,
       renovationDate: command.renovationDate,
       endingDate: command.endingDate,
     })
@@ -21,7 +22,7 @@ export class CreatePatronUseCase {
     // Check if patron with email already exists
     const existingPatron = await this.patronRepository.findByEmail(command.email)
     if (existingPatron) {
-      throw new Error('Patron with this email already exists')
+      throw new ConflictError('Patron with this email already exists')
     }
 
     // Save to repository
@@ -33,8 +34,7 @@ export class CreatePatronUseCase {
 
   private toDto(patron: Patron): PatronDto {
     return {
-      id: patron.id || '',
-      charge: patron.charge,
+      position: patron.position,
       givenName: patron.givenName,
       familyName: patron.familyName,
       email: patron.email,

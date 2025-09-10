@@ -7,7 +7,7 @@ const EMAIL_REGEX = new RegExp([
 ].join(''), 'u')
 
 export class Email {
-  private readonly value: string
+  private value: string
 
   constructor(value: string) {
     this.validateEmail(value)

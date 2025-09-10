@@ -1,7 +1,7 @@
-import { Patron } from '@/domain/entities/patron/patron.entity.js'
-import { IPatronRepository } from '@/domain/repositories/patron/patron.repository.js'
-import { PatronDto } from '@/contexts/patron/application/dtos/patron/patron.dto.js'
-import { ListPatronsQuery } from '@/contexts/patron/application/dtos/patron/list-patrons.query.js'
+import { Patron } from '@/contexts/patron/domain/patron.entity.js'
+import { IPatronRepository } from '@/contexts/patron/domain/patron.repository.js'
+import { PatronDto } from '@/contexts/patron/application/dtos/patron.dto.js'
+import { ListPatronsQuery } from '@/contexts/patron/application/dtos/list-patrons.query.js'
 
 export interface ListPatronsResult {
   patrons: PatronDto[]
@@ -38,7 +38,7 @@ export class ListPatronsUseCase {
   private toDto(patron: Patron): PatronDto {
     return {
       id: patron.id || '',
-      charge: patron.charge,
+      position: patron.position,
       givenName: patron.givenName,
       familyName: patron.familyName,
       email: patron.email,

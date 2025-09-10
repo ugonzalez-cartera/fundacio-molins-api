@@ -1,12 +1,9 @@
-export interface PatronDto {
-  id: string
-  charge: string
+export interface CreatePatronCommand {
   givenName: string
   familyName: string
   email: string
   role: string
+  position: string
   renovationDate: Date
   endingDate: Date
-  createdAt?: Date
-  updatedAt?: Date
 }

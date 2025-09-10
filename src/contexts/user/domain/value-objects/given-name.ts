@@ -1,7 +1,7 @@
 import { ValidationError } from '@/shared/errors.js'
 
 export class GivenName {
-  private readonly value: string
+  private value: string
 
   constructor(value: string) {
     this.validateName(value)

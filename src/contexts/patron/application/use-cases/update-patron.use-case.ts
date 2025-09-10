@@ -1,7 +1,7 @@
 import { Patron } from '@/contexts/patron/domain/patron.entity.js'
 import { IPatronRepository } from '@/contexts/patron/domain/patron.repository.js'
-import { PatronDto } from '@/contexts/patron/application/dtos/patron/patron.dto.js'
-import { UpdatePatronCommand } from '@/contexts/patron/application/dtos/patron/update-patron.command.js'
+import { PatronDto } from '@/contexts/patron/application/dtos/patron.dto.js'
+import { UpdatePatronCommand } from '@/contexts/patron/application/dtos/update-patron.command.js'
 import { NotFoundError, ValidationError } from '@/shared/errors.js'
 
 export class UpdatePatronUseCase {
@@ -12,7 +12,7 @@ export class UpdatePatronUseCase {
       throw new ValidationError('Patron ID is required')
     }
 
-    const existingPatron = await this.patronRepository.findOne({ id: command.id })
+    const existingPatron = await this.patronRepository.findById(command.id)
     if (!existingPatron) {
       throw new NotFoundError(`Patron with id ${command.id} not found`)
     }
@@ -37,7 +37,7 @@ export class UpdatePatronUseCase {
   private toDto(patron: Patron): PatronDto {
     return {
       id: patron.id || '',
-      charge: patron.charge,
+      position: patron.position,
       givenName: patron.givenName,
       familyName: patron.familyName,
       email: patron.email,

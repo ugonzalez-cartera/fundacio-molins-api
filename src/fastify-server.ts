@@ -67,11 +67,9 @@ export class FastifyServer {
       })
     })
 
-    // Manually register routes instead of using autoload
-    // since we're running TypeScript directly with tsx
     this.app.register(
       async fastify => {
-        const patronRoutes = await import('./infrastructure/adapters/http/routes/patron.routes.js')
+        const patronRoutes = await import('@/contexts/patron/infrastructure/adapters/http/patron.routes.js')
         await fastify.register(patronRoutes.default, { prefix: '/api/v1' })
       },
     )

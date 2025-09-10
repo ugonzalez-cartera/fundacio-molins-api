@@ -1,9 +1,9 @@
 import mongoose, { Schema, Document } from 'mongoose'
-import type { IPatron } from '../../domain/entities/patron/patron.interface.js'
+import type { IPatron } from '@/contexts/patron/domain/patron.interface.js'
 
 // Mongoose document interface
 export interface IPatronDocument extends IPatron, Document {
-  _id: mongoose.Types.ObjectId;
+  id: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,7 +27,7 @@ const patronSchema = new Schema<IPatronDocument>({
     lowercase: true,
     trim: true,
   },
-  charge: {
+  position: {
     type: String,
     required: true,
     trim: true,

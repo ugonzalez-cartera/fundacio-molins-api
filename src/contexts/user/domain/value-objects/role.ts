@@ -2,7 +2,7 @@ import { ValidationError } from '../../../../shared/errors.js'
 
 
 export class Role {
-  private readonly role: string
+  private role: string
   constructor(role: string) {
     this.validateRole(role)
     this.role = role

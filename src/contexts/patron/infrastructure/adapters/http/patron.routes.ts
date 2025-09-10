@@ -7,9 +7,9 @@ export default async function patronRoutes(fastify: FastifyInstance) {
   // Define schemas for validation
   const createPatronSchema = {
     type: 'object',
-    required: ['charge', 'givenName', 'familyName', 'email', 'role', 'renovationDate', 'endingDate'],
+    required: ['position', 'givenName', 'familyName', 'email', 'role', 'renovationDate', 'endingDate'],
     properties: {
-      charge: { type: 'string', minLength: 1 },
+      position: { type: 'string', minLength: 1 },
       givenName: { type: 'string', minLength: 1 },
       familyName: { type: 'string', minLength: 1 },
       email: { type: 'string', format: 'email' },
@@ -72,7 +72,7 @@ export default async function patronRoutes(fastify: FastifyInstance) {
                       givenName: { type: 'string' },
                       familyName: { type: 'string' },
                       role: { type: 'string' },
-                      charge: { type: 'string' },
+                      position: { type: 'string' },
                       renovationDate: { type: 'string', format: 'date-time' },
                       endingDate: { type: 'string', format: 'date-time' },
                     },
@@ -113,7 +113,7 @@ export default async function patronRoutes(fastify: FastifyInstance) {
       body: {
         type: 'object',
         properties: {
-          charge: { type: 'string' },
+          position: { type: 'string' },
           givenName: { type: 'string' },
           familyName: { type: 'string' },
           email: { type: 'string', format: 'email' },

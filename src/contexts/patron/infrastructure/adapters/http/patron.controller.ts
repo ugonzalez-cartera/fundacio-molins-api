@@ -1,18 +1,15 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { MongoosePatronRepository } from '@/contexts/patron/infrastructure/patron.repository.js'
+import { MongoosePatronRepository } from '@/contexts/patron/infrastructure/mongoose-patron.repository.js'
 import { CreatePatronUseCase } from '@/contexts/patron/application/use-cases/create-patron.use-case.js'
 import { GetPatronUseCase } from '@/contexts/patron/application/use-cases/get-patron.use-case.js'
 import { UpdatePatronUseCase } from '@/contexts/patron/application/use-cases/update-patron.use-case.js'
 import { DeletePatronUseCase } from '@/contexts/patron/application/use-cases/delete-patron.use-case.js'
 import { ListPatronsUseCase } from '@/contexts/patron/application/use-cases/list-patrons.use-case.js'
-import {
-  getErrorMessage,
-  DomainError,
-} from '@/shared/errors.js'
+import { handleHttpError } from '@/shared/errors.js'
 
 // DTOs for HTTP layer
 interface CreatePatronRequest {
-  charge: string
+  position: string
   givenName: string
   familyName: string
   email: string
@@ -48,48 +45,36 @@ export class PatronController {
     this.listPatronsUseCase = new ListPatronsUseCase(patronRepository)
   }
 
-  // Helper method to handle errors consistently
-  private handleError(error: unknown, reply: FastifyReply) {
-    if (error instanceof DomainError) {
-      return reply.code(error.statusCode).send({
-        success: false,
-        error: error.message,
-        code: error.code,
-      })
-    }
-
-    // Default to 500 for unknown errors
-    return reply.code(500).send({
-      success: false,
-      error: getErrorMessage(error),
-    })
-  }
-
   // Create patron
   async create(request: FastifyRequest<{ Body: CreatePatronRequest }>, reply: FastifyReply) {
     try {
-      const { charge,
+      const {
         givenName,
         familyName,
         email,
         role,
+        position,
         renovationDate,
         endingDate,
       } = request.body
 
       const patron = await this.createPatronUseCase.execute({
-        charge,
         givenName,
         familyName,
         email,
         role,
+        position,
         renovationDate: new Date(renovationDate),
         endingDate: new Date(endingDate),
       })
 
-      return patron
+      reply.code(201).send({
+        success: true,
+        data: patron,
+        message: 'Patron created successfully',
+      })
     } catch (error) {
-      return this.handleError(error, reply)
+      handleHttpError(error, reply, 'Error creating patron')
     }
   }
 
@@ -99,12 +84,12 @@ export class PatronController {
       const { id } = request.params
       const patron = await this.getPatronUseCase.execute({ id })
 
-      return reply.send({
+      reply.code(200).send({
         success: true,
         data: patron,
       })
     } catch (error) {
-      return this.handleError(error, reply)
+      handleHttpError(error, reply, `Error retrieving patron with id: ${request.params.id}`)
     }
   }
 
@@ -122,12 +107,12 @@ export class PatronController {
         role,
       })
 
-      return reply.send({
+      reply.code(200).send({
         success: true,
         data: result,
       })
     } catch (error) {
-      return this.handleError(error, reply)
+      handleHttpError(error, reply, 'Error retrieving patrons list')
     }
   }
 
@@ -154,12 +139,13 @@ export class PatronController {
         ...processedUpdates,
       })
 
-      return reply.send({
+      reply.code(200).send({
         success: true,
         data: patron,
+        message: 'Patron updated successfully',
       })
     } catch (error) {
-      return this.handleError(error, reply)
+      handleHttpError(error, reply, `Error updating patron with id: ${request.params.id}`)
     }
   }
 
@@ -167,11 +153,15 @@ export class PatronController {
   async delete(request: FastifyRequest<{ Params: PatronParams }>, reply: FastifyReply) {
     try {
       const { id } = request.params
-      await this.deletePatronUseCase.execute({ id })
+      const result = await this.deletePatronUseCase.execute({ id })
 
-      return reply.code(204).send()
+      reply.code(200).send({
+        success: true,
+        data: result,
+        message: 'Patron deleted successfully',
+      })
     } catch (error) {
-      return this.handleError(error, reply)
+      handleHttpError(error, reply, `Error deleting patron with id: ${request.params.id}`)
     }
   }
 }

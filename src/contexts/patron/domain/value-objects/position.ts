@@ -1,6 +1,6 @@
 import { ValidationError } from '@/shared/errors.js'
 
-export class Charge {
+export class Position {
   private readonly value: string
 
   constructor(value: string) {
@@ -10,26 +10,26 @@ export class Charge {
 
   private validateCharge(value: string): void {
     if (!value || typeof value !== 'string') {
-      throw new ValidationError('Charge cannot be empty')
+      throw new ValidationError('Position cannot be empty')
     }
 
     const trimmed = value.trim()
     if (trimmed.length === 0) {
-      throw new ValidationError('Charge cannot be only whitespace')
+      throw new ValidationError('Position cannot be only whitespace')
     }
 
     if (trimmed.length < 2) {
-      throw new ValidationError('Charge must be at least 2 characters long')
+      throw new ValidationError('Position must be at least 2 characters long')
     }
 
     if (trimmed.length > 100) {
-      throw new ValidationError('Charge cannot exceed 100 characters')
+      throw new ValidationError('Position cannot exceed 100 characters')
     }
 
-    // Foundation-specific charge validation
+    // Foundation-specific position validation
     const invalidCharRegex = /[@#$%^&*+=|\\<>{}[\]]/
     if (invalidCharRegex.test(trimmed)) {
-      throw new ValidationError('Charge contains invalid characters')
+      throw new ValidationError('Position contains invalid characters')
     }
   }
 
@@ -53,7 +53,7 @@ export class Charge {
     return this.value
   }
 
-  equals(other: Charge): boolean {
+  equals(other: Position): boolean {
     return this.value === other.value
   }
 

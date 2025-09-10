@@ -1,6 +1,6 @@
 import type { IPatronRepository } from '@/contexts/patron/domain/patron.repository.js'
 import { Patron } from '@/contexts/patron/domain/patron.entity.js'
-import { PatronModel, type IPatronDocument } from '@/contexts/patron/infrastructure/patron.model.js'
+import { PatronModel, type IPatronDocument } from '@/contexts/patron/infrastructure/mongoose-patron.model.js'
 import {
   getErrorMessage,
   DatabaseError,
@@ -10,13 +10,12 @@ import {
 export class MongoosePatronRepository implements IPatronRepository {
   // Convert Mongoose document to domain entity
   private toDomainEntity(doc: IPatronDocument): Patron {
-    return Patron.fromPrimitives({
-      id: doc._id?.toString(),
+    return Patron.create({
       email: doc.email,
       givenName: doc.givenName,
       familyName: doc.familyName,
       role: doc.role,
-      charge: doc.charge,
+      position: doc.position,
       renovationDate: doc.renovationDate,
       endingDate: doc.endingDate,
     })
@@ -28,15 +27,6 @@ export class MongoosePatronRepository implements IPatronRepository {
       return docs.map(doc => this.toDomainEntity(doc))
     } catch (error) {
       throw new DatabaseError(`Failed to find all patrons: ${getErrorMessage(error)}`)
-    }
-  }
-
-  async findByEmail(email: string): Promise<Patron | null> {
-    try {
-      const doc = await PatronModel.findOne({ email }).exec()
-      return doc ? this.toDomainEntity(doc) : null
-    } catch (error) {
-      throw new DatabaseError(`Failed to find patron by email: ${getErrorMessage(error)}`)
     }
   }
 
@@ -56,9 +46,18 @@ export class MongoosePatronRepository implements IPatronRepository {
     }
   }
 
-  async findOne(filter: Record<string, unknown>): Promise<Patron | null> {
+  async findByEmail(email: string): Promise<Patron | null> {
     try {
-      const doc = await PatronModel.findOne(filter).exec()
+      const doc = await PatronModel.findOne({ email }).exec()
+      return doc ? this.toDomainEntity(doc) : null
+    } catch (error) {
+      throw new DatabaseError(`Failed to find patron by email: ${getErrorMessage(error)}`)
+    }
+  }
+
+  async findById(id: string): Promise<Patron | null> {
+    try {
+      const doc = await PatronModel.findOne({ _id: id }).exec()
       return doc ? this.toDomainEntity(doc) : null
     } catch (error) {
       throw new DatabaseError(`Failed to find patron: ${getErrorMessage(error)}`)
@@ -117,13 +116,13 @@ export class MongoosePatronRepository implements IPatronRepository {
       // Build query filter
       const filter: Record<string, unknown> = {}
 
-      // Search in givenName, familyName, email, or charge
+      // Search in givenName, familyName, email, or position
       if (searchTerm) {
         filter.$or = [
           { givenName: { $regex: searchTerm, $options: 'i' } },
           { familyName: { $regex: searchTerm, $options: 'i' } },
           { email: { $regex: searchTerm, $options: 'i' } },
-          { charge: { $regex: searchTerm, $options: 'i' } },
+          { position: { $regex: searchTerm, $options: 'i' } },
         ]
       }
 
