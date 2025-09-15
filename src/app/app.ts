@@ -1,4 +1,4 @@
-import { FastifyServer } from '@/fastify-server.js'
+import { FastifyServer } from '@/server/fastify-server.js'
 import { DatabaseConnection } from '@/shared/database/connection.js'
 import { ApplicationLifecycle } from '@/shared/lifecycle/application-lifecycle.js'
 import { ConfigService } from '@/shared/config/config.service.js'
