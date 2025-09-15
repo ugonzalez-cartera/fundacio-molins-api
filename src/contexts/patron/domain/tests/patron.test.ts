@@ -84,3 +84,29 @@ describe('Patron property setters', () => {
     }).toThrow(ValidationError)
   })
 })
+
+describe('Patron methods', () => {
+  test('should convert to primitives', () => {
+    const patron = Patron.create({
+      givenName: 'John',
+      familyName: 'Doe',
+      email: 'johndoe@test.com',
+      role: 'admin',
+      position: 'director',
+      renovationDate: new Date('2023-01-01'),
+      endingDate: new Date('2024-01-01'),
+    })
+
+    const primitives = patron.toPrimitives()
+
+    expect(primitives).toEqual({
+      givenName: 'John',
+      familyName: 'Doe',
+      email: 'johndoe@test.com',
+      role: 'admin',
+      position: 'director',
+      renovationDate: new Date('2023-01-01'),
+      endingDate: new Date('2024-01-01'),
+    })
+  })
+})
