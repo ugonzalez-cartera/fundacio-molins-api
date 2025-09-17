@@ -2,10 +2,13 @@ import { Patron } from '@/contexts/patron/domain/patron.entity.js'
 import { IPatronRepository } from '@/contexts/patron/domain/patron.repository.js'
 import { PatronDto } from '@/contexts/patron/application/dtos/patron.dto.js'
 import { UpdatePatronCommand } from '@/contexts/patron/application/dtos/update-patron.command.js'
-import { NotFoundError, ValidationError } from '@/shared/errors.js'
-
+import { NotFoundError, ValidationError, ConflictError } from '@/shared/errors.js'
+import { container } from '@/contexts/patron/infrastructure/di/patron.container.js'
 export class UpdatePatronUseCase {
-  constructor(private readonly patronRepository: IPatronRepository) {}
+  private patronRepository: IPatronRepository
+  constructor() {
+    this.patronRepository = container.resolve('patronRepository')
+  }
 
   async execute(command: UpdatePatronCommand): Promise<PatronDto> {
     if (!command.id) {
@@ -21,7 +24,7 @@ export class UpdatePatronUseCase {
     if (command.email && command.email !== existingPatron.email) {
       const existingWithEmail = await this.patronRepository.findByEmail(command.email)
       if (existingWithEmail) {
-        throw new ValidationError('Email already exists')
+        throw new ConflictError('Patron with this email already exists')
       }
     }
 
@@ -36,6 +39,7 @@ export class UpdatePatronUseCase {
 
   private toDto(patron: Patron): PatronDto {
     return {
+      id: patron.id || '',
       position: patron.position,
       givenName: patron.givenName,
       familyName: patron.familyName,

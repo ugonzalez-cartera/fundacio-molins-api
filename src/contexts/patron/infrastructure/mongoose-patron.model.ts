@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Types } from 'mongoose'
 
 // Mongoose document interface - infrastructure concern
 export interface IPatronDocument extends Document {
-  _id: Types.ObjectId  // Mongoose uses _id
+  _id: Types.ObjectId
   givenName: string
   familyName: string
   email: string

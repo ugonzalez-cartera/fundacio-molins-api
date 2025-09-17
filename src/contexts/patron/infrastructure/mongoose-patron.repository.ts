@@ -59,8 +59,16 @@ export class MongoosePatronRepository implements IPatronRepository {
   async findById(id: string): Promise<Patron | null> {
     try {
       const doc = await PatronModel.findOne({ _id: id }).exec()
-      return doc ? this.toDomainEntity(doc) : null
+
+      if (!doc) {
+        return null
+      }
+
+      const domainEntity = this.toDomainEntity(doc)
+
+      return domainEntity
     } catch (error) {
+      console.error('❌ Repository: Error finding patron:', error)
       throw new DatabaseError(`Failed to find patron: ${getErrorMessage(error)}`)
     }
   }

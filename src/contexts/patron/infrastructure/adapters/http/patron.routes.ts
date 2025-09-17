@@ -4,28 +4,30 @@ import * as patronSchemas from '@/contexts/patron/infrastructure/adapters/http/s
 import { container } from '@/contexts/patron/infrastructure/di/patron.container.js'
 
 export default async function patronRoutes(fastify: FastifyInstance) {
+  const patronController = container.resolve('patronController')
+
   // POST /patrons - Create a new patron
   fastify.post('/patrons', {
     schema: patronSchemas.createPatronSchema,
-  }, container.resolve('patronController').create.bind(container.resolve('patronController')))
+  }, patronController.create.bind(patronController))
 
   // GET /patrons - Get all patrons
   fastify.get('/patrons', {
     schema: patronSchemas.listPatronsSchema,
-  }, container.resolve('patronController').getAll.bind(container.resolve('patronController')))
+  }, patronController.getAll.bind(patronController))
 
   // GET /patrons/:id - Get patron by ID
   fastify.get('/patrons/:id', {
     schema: patronSchemas.getPatronSchema,
-  }, container.resolve('patronController').getById.bind(container.resolve('patronController')))
+  }, patronController.getById.bind(patronController))
 
   // PUT /patrons/:id - Update patron
   fastify.put('/patrons/:id', {
     schema: patronSchemas.getPatronSchema,
-  }, container.resolve('patronController').update.bind(container.resolve('patronController')))
+  }, patronController.update.bind(patronController))
 
   // DELETE /patrons/:id - Delete patron
   fastify.delete('/patrons/:id', {
     schema: patronSchemas.deletePatronSchema,
-  }, container.resolve('patronController').delete.bind(container.resolve('patronController')))
+  }, patronController.delete.bind(patronController))
 }

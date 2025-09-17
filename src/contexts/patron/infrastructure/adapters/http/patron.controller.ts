@@ -7,6 +7,7 @@ import { ListPatronsUseCase } from '@/contexts/patron/application/use-cases/list
 import { handleHttpError } from '@/shared/errors.js'
 
 import { container } from '@/contexts/patron/infrastructure/di/patron.container.js'
+import { PatronDto } from '@/contexts/patron/application/dtos/patron.dto'
 
 // DTOs for HTTP layer
 interface CreatePatronRequest {
@@ -81,9 +82,8 @@ export class PatronController {
   async getById(request: FastifyRequest<{ Params: PatronParams }>, reply: FastifyReply) {
     try {
       const { id } = request.params
-      const patron = await this.getPatronUseCase.execute({ id })
+      const patron: PatronDto = await this.getPatronUseCase.execute({ id })
 
-      console.info('Retrieved patron:', patron) // Debug log
       reply.code(200).send({
         success: true,
         data: patron,

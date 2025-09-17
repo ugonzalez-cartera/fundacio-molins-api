@@ -8,7 +8,19 @@ export const getPatronSchema = {
       type: 'object',
       properties: {
         success: { type: 'boolean' },
-        data: { type: 'object' },
+        data: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            position: { type: 'string' },
+            givenName: { type: 'string' },
+            familyName: { type: 'string' },
+            email: { type: 'string' },
+            role: { type: 'string' },
+            renovationDate: { type: 'string' },
+            endingDate: { type: 'string' },
+          },
+        },
       },
     },
   },

@@ -14,7 +14,6 @@ export class GetPatronUseCase {
 
   async execute(query: GetPatronQuery): Promise<PatronDto> {
     const patron = await this.patronRepository.findById(query.id)
-
     if (!patron) {
       throw new NotFoundError(`Patron with id ${query.id} not found`)
     }

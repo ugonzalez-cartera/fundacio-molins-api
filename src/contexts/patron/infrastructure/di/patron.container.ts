@@ -43,7 +43,7 @@ export function createDIContainer(): AwilixContainer<DIContainer> {
 
   // Register services
   container.register({
-    // Repositories (singletons for better performance)
+    // Repository
     patronRepository: asClass(MongoosePatronRepository, {
       lifetime: Lifetime.SINGLETON,
     }),
