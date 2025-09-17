@@ -8,6 +8,7 @@ export class Patron extends User implements IPatron {
   private _endingDate: Date
 
   private constructor(
+    id: string,
     givenName: string,
     familyName: string,
     email: string,
@@ -16,13 +17,14 @@ export class Patron extends User implements IPatron {
     renovationDate: Date,
     endingDate: Date,
   ) {
-    super(givenName, familyName, email, role)
+    super(id, givenName, familyName, email, role)
     this._position = new Position(position)
     this._renovationDate = renovationDate
     this._endingDate = endingDate
   }
 
   static create(params: {
+    id: string,
     givenName: string,
     familyName: string,
     email: string,
@@ -32,6 +34,7 @@ export class Patron extends User implements IPatron {
     endingDate: Date,
   }): Patron {
     return new Patron(
+      params.id,
       params.givenName,
       params.familyName,
       params.email,
@@ -67,6 +70,7 @@ export class Patron extends User implements IPatron {
   }
 
   toPrimitives(): {
+    id: string,
     email: string
     givenName: string
     familyName: string
@@ -76,6 +80,7 @@ export class Patron extends User implements IPatron {
     endingDate: Date
     } {
     return {
+      id: this.id,
       email: this.email,
       givenName: this.givenName,
       familyName: this.familyName,

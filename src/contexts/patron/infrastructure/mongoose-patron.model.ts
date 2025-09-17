@@ -1,9 +1,17 @@
-import mongoose, { Schema, Document } from 'mongoose'
-import type { IPatron } from '@/contexts/patron/domain/patron.interface.js'
+import mongoose, { Schema, Document, Types } from 'mongoose'
 
-export interface IPatronDocument extends IPatron, Document {
-  createdAt: Date;
-  updatedAt: Date;
+// Mongoose document interface - infrastructure concern
+export interface IPatronDocument extends Document {
+  _id: Types.ObjectId  // Mongoose uses _id
+  givenName: string
+  familyName: string
+  email: string
+  position: string
+  role: string
+  renovationDate: Date
+  endingDate: Date
+  createdAt: Date
+  updatedAt: Date
 }
 
 // Mongoose schema

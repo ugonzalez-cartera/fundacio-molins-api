@@ -11,6 +11,7 @@ export class MongoosePatronRepository implements IPatronRepository {
   // Convert Mongoose document to domain entity
   private toDomainEntity(doc: IPatronDocument): Patron {
     return Patron.create({
+      id: doc._id.toString(),
       email: doc.email,
       givenName: doc.givenName,
       familyName: doc.familyName,

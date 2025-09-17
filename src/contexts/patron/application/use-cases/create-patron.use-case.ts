@@ -10,6 +10,7 @@ export class CreatePatronUseCase {
   async execute(command: CreatePatronCommand): Promise<PatronDto> {
     // Create domain entity with business logic validation
     const patron = Patron.create({
+      id: command.email,
       email: command.email,
       givenName: command.givenName,
       familyName: command.familyName,
@@ -34,6 +35,7 @@ export class CreatePatronUseCase {
 
   private toDto(patron: Patron): PatronDto {
     return {
+      id: patron.id || '',
       position: patron.position,
       givenName: patron.givenName,
       familyName: patron.familyName,

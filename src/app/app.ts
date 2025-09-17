@@ -1,7 +1,7 @@
-import { FastifyServer } from '@/server/fastify-server.js'
-import { DatabaseConnection } from '@/shared/database/connection.js'
-import { ApplicationLifecycle } from '@/shared/lifecycle/application-lifecycle.js'
-import { ConfigService } from '@/shared/config/config.service.js'
+import { FastifyServer } from '@/infrastructure/server/fastify-server.js'
+import { DatabaseConnection } from '@/infrastructure/persistence/database/connection.js'
+import { ApplicationLifecycle } from '@/infrastructure/lifecycle/application-lifecycle.js'
+import { ConfigService } from '@/infrastructure/config/config.service.js'
 
 export class Application {
   private server: FastifyServer

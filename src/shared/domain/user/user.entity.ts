@@ -2,17 +2,20 @@ import { IUser } from '@/shared/domain/user/user.interface.js'
 import { Email, GivenName, Role } from '@/shared/domain/user/value-objects/index.js'
 
 export abstract class User implements IUser {
+  public id: string
   private _role: Role
   private _email: Email
   private _givenName: GivenName
   private _familyName: GivenName
 
   constructor(
+    id: string,
     givenName: string,
     familyName: string,
     email: string,
     role: string,
   ) {
+    this.id = id
     this._role = new Role(role)
     this._email = new Email(email)
     this._givenName = new GivenName(givenName)

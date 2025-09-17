@@ -37,6 +37,7 @@ export class ListPatronsUseCase {
 
   private toDto(patron: Patron): PatronDto {
     return {
+      id: patron.id,
       position: patron.position,
       givenName: patron.givenName,
       familyName: patron.familyName,
