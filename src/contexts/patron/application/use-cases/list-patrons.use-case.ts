@@ -3,6 +3,8 @@ import { IPatronRepository } from '@/contexts/patron/domain/patron.repository.js
 import { PatronDto } from '@/contexts/patron/application/dtos/patron.dto.js'
 import { ListPatronsQuery } from '@/contexts/patron/application/dtos/list-patrons.query.js'
 
+import { container } from '@/contexts/patron/infrastructure/di/patron.container.js'
+
 export interface ListPatronsResult {
   patrons: PatronDto[]
   total: number
@@ -12,7 +14,11 @@ export interface ListPatronsResult {
 }
 
 export class ListPatronsUseCase {
-  constructor(private readonly patronRepository: IPatronRepository) {}
+  private patronRepository: IPatronRepository
+
+  constructor() {
+    this.patronRepository = container.resolve('patronRepository')
+  }
 
   async execute(query: ListPatronsQuery): Promise<ListPatronsResult> {
     const page = query.page || 1

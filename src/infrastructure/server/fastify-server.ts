@@ -4,6 +4,8 @@ import fastifyHelmet from '@fastify/helmet'
 import fastifyMultipart from '@fastify/multipart'
 import chalk from 'chalk'
 
+import { container as patronContainer } from '@/contexts/patron/infrastructure/di/patron.container.js'
+
 export class FastifyServer {
   private app: FastifyInstance
 
@@ -12,6 +14,11 @@ export class FastifyServer {
     this.setupPlugins()
     this.setupRoutes()
     this.setupHooks()
+    this.setDecorators()
+  }
+
+  private setDecorators(): void {
+    this.app.decorate('patronDIContainer', patronContainer)
   }
 
   private createServer(): FastifyInstance {

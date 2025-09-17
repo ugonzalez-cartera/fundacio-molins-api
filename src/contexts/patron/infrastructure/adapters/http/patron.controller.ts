@@ -1,11 +1,12 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { MongoosePatronRepository } from '@/contexts/patron/infrastructure/mongoose-patron.repository.js'
 import { CreatePatronUseCase } from '@/contexts/patron/application/use-cases/create-patron.use-case.js'
 import { GetPatronUseCase } from '@/contexts/patron/application/use-cases/get-patron.use-case.js'
 import { UpdatePatronUseCase } from '@/contexts/patron/application/use-cases/update-patron.use-case.js'
 import { DeletePatronUseCase } from '@/contexts/patron/application/use-cases/delete-patron.use-case.js'
 import { ListPatronsUseCase } from '@/contexts/patron/application/use-cases/list-patrons.use-case.js'
 import { handleHttpError } from '@/shared/errors.js'
+
+import { container } from '@/contexts/patron/infrastructure/di/patron.container.js'
 
 // DTOs for HTTP layer
 interface CreatePatronRequest {
@@ -36,13 +37,11 @@ export class PatronController {
   private listPatronsUseCase: ListPatronsUseCase
 
   constructor() {
-    const patronRepository = new MongoosePatronRepository()
-
-    this.createPatronUseCase = new CreatePatronUseCase(patronRepository)
-    this.getPatronUseCase = new GetPatronUseCase(patronRepository)
-    this.updatePatronUseCase = new UpdatePatronUseCase(patronRepository)
-    this.deletePatronUseCase = new DeletePatronUseCase(patronRepository)
-    this.listPatronsUseCase = new ListPatronsUseCase(patronRepository)
+    this.createPatronUseCase = container.resolve('createPatronUseCase')
+    this.getPatronUseCase = container.resolve('getPatronUseCase')
+    this.updatePatronUseCase = container.resolve('updatePatronUseCase')
+    this.deletePatronUseCase = container.resolve('deletePatronUseCase')
+    this.listPatronsUseCase = container.resolve('listPatronsUseCase')
   }
 
   // Create patron
@@ -84,6 +83,7 @@ export class PatronController {
       const { id } = request.params
       const patron = await this.getPatronUseCase.execute({ id })
 
+      console.info('Retrieved patron:', patron) // Debug log
       reply.code(200).send({
         success: true,
         data: patron,
