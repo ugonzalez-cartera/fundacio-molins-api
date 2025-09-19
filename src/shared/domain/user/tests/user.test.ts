@@ -30,6 +30,7 @@ describe('User entity behavior (via Patron)', () => {
     test('validates email format', () => {
       expect(() => {
         Patron.create({
+          id: '123',
           givenName: 'John',
           familyName: 'Doe',
           email: 'invalid-email',
@@ -44,6 +45,7 @@ describe('User entity behavior (via Patron)', () => {
     test('validates role is not empty', () => {
       expect(() => {
         Patron.create({
+          id: '123',
           givenName: 'John',
           familyName: 'Doe',
           email: 'john.doe@example.com',
@@ -58,6 +60,7 @@ describe('User entity behavior (via Patron)', () => {
     test('validates given name is not empty', () => {
       expect(() => {
         Patron.create({
+          id: '123',
           givenName: '',
           familyName: 'Doe',
           email: 'john.doe@example.com',
