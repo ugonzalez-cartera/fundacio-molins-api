@@ -12,6 +12,7 @@
     "lint:fix": "eslint . --ext .js,.ts --fix",
     "test": "vitest",
     "test:app": "vitest ./app",
+    "test:config": "vitest ./config",
     "test:user": "vitest ./shared/domain/user",
     "test:patron": "vitest ./contexts/patron",
     "test:memory": "vitest ./contexts/memory",
