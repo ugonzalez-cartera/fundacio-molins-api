@@ -1,5 +1,5 @@
 import { FastifyServer } from '@/shared/infrastructure/server/fastify-server.js'
-import { DatabaseConnection } from '@/shared/infrastructure/persistence/database/connection.js'
+import { DatabaseConnection } from '@/shared/infrastructure/database/connection.js'
 import { ApplicationLifecycle } from '@/shared/infrastructure/lifecycle/application-lifecycle.js'
 import { ConfigService } from '@/shared/infrastructure/config/config.service.js'
 
