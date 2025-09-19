@@ -11,6 +11,7 @@ describe('User entity behavior (via Patron)', () => {
   describe('User construction', () => {
     test('creates user with valid data', () => {
       const patron = Patron.create({
+        id: '123',
         givenName: 'John',
         familyName: 'Doe',
         email: 'john.doe@example.com',
