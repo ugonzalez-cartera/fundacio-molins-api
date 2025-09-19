@@ -6,6 +6,7 @@ import { ValidationError } from '@/shared/errors.js'
 describe('Patron Entity', () => {
   test('should create new Patron', () => {
     const patron = Patron.create({
+      id: '123',
       givenName: 'John',
       familyName: 'Doe',
       email: 'johndoe@test.com',
@@ -27,6 +28,7 @@ describe('Patron property setters', () => {
 
   beforeEach(() => {
     patron = Patron.create({
+      id: '123',
       givenName: 'John',
       familyName: 'Doe',
       email: 'johndoe@test.com',
@@ -88,6 +90,7 @@ describe('Patron property setters', () => {
 describe('Patron methods', () => {
   test('should convert to primitives', () => {
     const patron = Patron.create({
+      id: '123',
       givenName: 'John',
       familyName: 'Doe',
       email: 'johndoe@test.com',
