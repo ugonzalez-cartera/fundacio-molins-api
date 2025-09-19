@@ -10,11 +10,13 @@ import {
 import { MongoosePatronRepository } from '@/contexts/patron/infrastructure/mongoose-patron.repository.js'
 
 // Use Cases
-import { CreatePatronUseCase } from '@/contexts/patron/application/use-cases/create-patron.use-case.js'
-import { GetPatronUseCase } from '@/contexts/patron/application/use-cases/get-patron.use-case.js'
-import { UpdatePatronUseCase } from '@/contexts/patron/application/use-cases/update-patron.use-case.js'
-import { DeletePatronUseCase } from '@/contexts/patron/application/use-cases/delete-patron.use-case.js'
-import { ListPatronsUseCase } from '@/contexts/patron/application/use-cases/list-patrons.use-case.js'
+import {
+  CreatePatronUseCase,
+  GetPatronUseCase,
+  UpdatePatronUseCase,
+  DeletePatronUseCase,
+  ListPatronsUseCase,
+} from '@/contexts/patron/application/use-cases/index.js'
 
 // Controllers
 import { PatronController } from '@/contexts/patron/infrastructure/adapters/http/patron.controller.js'
