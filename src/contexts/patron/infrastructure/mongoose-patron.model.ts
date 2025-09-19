@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, Types } from 'mongoose'
 
-// Mongoose document interface - infrastructure concern
+import { Roles } from '@/shared/enums/roles.enum.js'
+
 export interface IPatronDocument extends Document {
   _id: Types.ObjectId
   givenName: string
@@ -37,6 +38,7 @@ const patronSchema = new Schema<IPatronDocument>({
   role: {
     type: String,
     trim: true,
+    enum: Roles,
   },
   renovationDate: {
     type: Date,
