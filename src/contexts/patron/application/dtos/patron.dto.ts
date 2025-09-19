@@ -1,4 +1,4 @@
-export interface PatronDto {
+export type PatronDto = {
   id: string,
   givenName: string
   familyName: string

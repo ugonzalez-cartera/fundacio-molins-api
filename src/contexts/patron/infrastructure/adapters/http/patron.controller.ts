@@ -9,7 +9,7 @@ import { container } from '@/contexts/patron/infrastructure/di/patron.container.
 import { PatronDto } from '@/contexts/patron/application/dtos/patron.dto'
 
 // DTOs for HTTP layer
-interface CreatePatronRequest {
+type CreatePatronRequest = {
   position: string
   givenName: string
   familyName: string
@@ -19,11 +19,11 @@ interface CreatePatronRequest {
   endingDate: string // Will be converted to Date
 }
 
-interface PatronParams {
+type PatronParams = {
   id: string
 }
 
-interface ListPatronsQuerystring {
+type ListPatronsQuerystring = {
   page?: string
   limit?: string
   role?: string

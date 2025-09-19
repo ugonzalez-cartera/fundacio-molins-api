@@ -1,4 +1,4 @@
-export interface CreatePatronCommand {
+export type CreatePatronCommand = {
   givenName: string
   familyName: string
   email: string

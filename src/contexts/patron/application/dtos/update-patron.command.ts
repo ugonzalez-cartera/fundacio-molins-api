@@ -1,4 +1,4 @@
-export interface UpdatePatronCommand {
+export type UpdatePatronCommand = {
   id: string
   position?: string
   givenName?: string

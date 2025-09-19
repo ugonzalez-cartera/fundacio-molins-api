@@ -1,6 +1,6 @@
 import { Patron } from '@/contexts/patron/domain/patron.entity.js'
 
-export interface IPatronRepository {
+export type IPatronRepository = {
   find(options: { filter: Record<string, unknown>, limit: number, page: number }): Promise<Patron[]>
   findById(id: string): Promise<Patron | null>
   findByEmail(email: string): Promise<Patron | null>

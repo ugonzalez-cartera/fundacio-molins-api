@@ -1,4 +1,4 @@
-import type { IPatron } from '@/contexts/patron/domain/patron.interface.js'
+import type { IPatron } from '@/contexts/patron/domain/patron.type.js'
 import { Position } from '@/contexts/patron/domain/value-objects/position.js'
 import { User } from '@/shared/domain/user/user.entity.js'
 

@@ -1,3 +1,3 @@
-export interface GetPatronQuery {
+export type GetPatronQuery = {
   id: string
 }

@@ -131,7 +131,7 @@ export function isError(error: unknown): error is Error {
 // ...existing code...
 
 // HTTP Error Handler for Controllers
-export interface ErrorResponse {
+export type ErrorResponse = {
   success: false
   error: string
   code: string

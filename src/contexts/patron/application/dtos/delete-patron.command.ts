@@ -1,3 +1,3 @@
-export interface DeletePatronCommand {
+export type DeletePatronCommand = {
   id: string
 }

@@ -20,7 +20,7 @@ import { ListPatronsUseCase } from '@/contexts/patron/application/use-cases/list
 import { PatronController } from '@/contexts/patron/infrastructure/adapters/http/patron.controller.js'
 
 // Types for DI container
-export interface DIContainer {
+export type DIContainer = {
   // Repositories
   patronRepository: MongoosePatronRepository
 

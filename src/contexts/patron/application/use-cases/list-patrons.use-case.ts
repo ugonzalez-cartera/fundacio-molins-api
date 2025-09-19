@@ -5,7 +5,7 @@ import { ListPatronsQuery } from '@/contexts/patron/application/dtos/list-patron
 
 import { container } from '@/contexts/patron/infrastructure/di/patron.container.js'
 
-interface ListPatronsResult {
+type ListPatronsResult = {
   patrons: PatronDto[]
   total: number
   page: number

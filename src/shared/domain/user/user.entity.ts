@@ -1,4 +1,4 @@
-import { IUser } from '@/shared/domain/user/user.interface.js'
+import { IUser } from '@/shared/domain/user/user.type.js'
 import { Email, GivenName, Role } from '@/shared/domain/user/value-objects/index.js'
 
 export abstract class User implements IUser {

@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Types } from 'mongoose'
 
 import { Roles } from '@/shared/enums/roles.enum.js'
 
-export interface IPatronDocument extends Document {
+export type IPatronDocument = Document & {
   _id: Types.ObjectId
   givenName: string
   familyName: string
