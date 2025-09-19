@@ -121,6 +121,7 @@ describe('User entity behavior (via Patron)', () => {
   describe('User value object integration', () => {
     test('email is properly normalized', () => {
       const patron = Patron.create({
+        id: '123',
         givenName: 'John',
         familyName: 'Doe',
         email: '  JOHN.DOE@EXAMPLE.COM  ',
@@ -135,6 +136,7 @@ describe('User entity behavior (via Patron)', () => {
 
     test('names are properly trimmed', () => {
       const patron = Patron.create({
+        id: '123',
         givenName: '  John  ',
         familyName: '  Doe  ',
         email: 'john.doe@example.com',
