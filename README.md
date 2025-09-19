@@ -31,7 +31,7 @@ This project implements **Hexagonal Architecture** (also known as Ports and Adap
 
 ```
 src/
-├── app/                     # Application orchestration layer
+├── app/                    # Application orchestration layer
 │   ├── app.ts              # Main application class
 │   └── tests/              # Application tests
 ├── contexts/               # Business domains (Bounded Contexts)
