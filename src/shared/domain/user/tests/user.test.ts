@@ -74,6 +74,7 @@ describe('User entity behavior (via Patron)', () => {
 
     beforeEach(() => {
       patron = Patron.create({
+        id: '123',
         givenName: 'John',
         familyName: 'Doe',
         email: 'john.doe@example.com',

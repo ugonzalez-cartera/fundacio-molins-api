@@ -6,11 +6,7 @@ import { NotFoundError } from '@/shared/errors.js'
 
 import { container } from '@/contexts/patron/infrastructure/di/patron.container.js'
 export class GetPatronUseCase {
-  private patronRepository: IPatronRepository
-
-  constructor() {
-    this.patronRepository = container.resolve('patronRepository')
-  }
+  private patronRepository = container.resolve<IPatronRepository>('patronRepository')
 
   async execute(query: GetPatronQuery): Promise<PatronDto> {
     const patron = await this.patronRepository.findById(query.id)

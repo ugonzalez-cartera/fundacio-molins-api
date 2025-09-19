@@ -5,7 +5,6 @@ import { UpdatePatronUseCase } from '@/contexts/patron/application/use-cases/upd
 import { DeletePatronUseCase } from '@/contexts/patron/application/use-cases/delete-patron.use-case.js'
 import { ListPatronsUseCase } from '@/contexts/patron/application/use-cases/list-patrons.use-case.js'
 import { handleHttpError } from '@/shared/errors.js'
-
 import { container } from '@/contexts/patron/infrastructure/di/patron.container.js'
 import { PatronDto } from '@/contexts/patron/application/dtos/patron.dto'
 

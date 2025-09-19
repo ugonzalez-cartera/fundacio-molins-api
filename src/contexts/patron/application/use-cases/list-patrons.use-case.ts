@@ -5,7 +5,7 @@ import { ListPatronsQuery } from '@/contexts/patron/application/dtos/list-patron
 
 import { container } from '@/contexts/patron/infrastructure/di/patron.container.js'
 
-export interface ListPatronsResult {
+interface ListPatronsResult {
   patrons: PatronDto[]
   total: number
   page: number
@@ -14,11 +14,7 @@ export interface ListPatronsResult {
 }
 
 export class ListPatronsUseCase {
-  private patronRepository: IPatronRepository
-
-  constructor() {
-    this.patronRepository = container.resolve('patronRepository')
-  }
+  private patronRepository = container.resolve<IPatronRepository>('patronRepository')
 
   async execute(query: ListPatronsQuery): Promise<ListPatronsResult> {
     const page = query.page || 1

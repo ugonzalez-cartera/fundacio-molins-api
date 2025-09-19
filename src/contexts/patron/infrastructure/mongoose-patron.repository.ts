@@ -59,7 +59,6 @@ export class MongoosePatronRepository implements IPatronRepository {
   async findById(id: string): Promise<Patron | null> {
     try {
       const doc = await PatronModel.findOne({ _id: id }).exec()
-
       if (!doc) {
         return null
       }

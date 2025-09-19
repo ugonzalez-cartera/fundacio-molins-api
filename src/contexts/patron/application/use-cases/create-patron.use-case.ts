@@ -6,11 +6,7 @@ import { ConflictError } from '@/shared/errors.js'
 
 import { container } from '@/contexts/patron/infrastructure/di/patron.container.js'
 export class CreatePatronUseCase {
-  private patronRepository: IPatronRepository
-
-  constructor() {
-    this.patronRepository = container.resolve<IPatronRepository>('patronRepository')
-  }
+  private patronRepository = container.resolve<IPatronRepository>('patronRepository')
 
   async execute(command: CreatePatronCommand): Promise<PatronDto> {
     // Create domain entity with business logic validation

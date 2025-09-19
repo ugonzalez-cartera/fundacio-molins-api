@@ -5,10 +5,7 @@ import { UpdatePatronCommand } from '@/contexts/patron/application/dtos/update-p
 import { NotFoundError, ValidationError, ConflictError } from '@/shared/errors.js'
 import { container } from '@/contexts/patron/infrastructure/di/patron.container.js'
 export class UpdatePatronUseCase {
-  private patronRepository: IPatronRepository
-  constructor() {
-    this.patronRepository = container.resolve('patronRepository')
-  }
+  private patronRepository = container.resolve<IPatronRepository>('patronRepository')
 
   async execute(command: UpdatePatronCommand): Promise<PatronDto> {
     if (!command.id) {
