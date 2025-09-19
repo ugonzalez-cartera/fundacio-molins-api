@@ -21,9 +21,9 @@ export class ListPatronsUseCase {
     const limit = query.limit || 10
 
     const options = {
+      filter: { role: query.role  },
       page,
       limit,
-      role: query.role,
     }
 
     const patrons = await this.patronRepository.find(options)
