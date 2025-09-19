@@ -31,20 +31,20 @@ This project implements **Hexagonal Architecture** (also known as Ports and Adap
 
 ```
 src/
-├── app/                    # Application orchestration layer
-│   ├── app.ts              # Main application class
-│   └── tests/              # Application tests
-├── contexts/               # Business domains (Bounded Contexts)
-│   ├── patron/            # Patron management domain
-│   │   ├── domain/        # Business logic and entities
-│   │   ├── application/   # Use cases and DTOs
-│   │   └── infrastructure/# External adapters (DB, HTTP)
-│   ├── meeting/           # Meeting management domain
-│   └── memory/            # Memory/document domain
-└── shared/                # Shared infrastructure and utilities
-    ├── domain/            # Common domain primitives
-    ├── infrastructure/    # Shared infrastructure services
-    └── errors.ts          # Common error handling
+├── app/                      # Application orchestration layer
+│   ├── app.ts                # Main application class
+│   └── tests/                # Application tests
+├── contexts/                 # Business domains (Bounded Contexts)
+│   ├── patron/              # Patron management domain
+│   │   ├── domain/          # Business logic and entities
+│   │   ├── application/     # Use cases and DTOs
+│   │   └── infrastructure/  # External adapters (DB, HTTP)
+│   ├── meeting/             # Meeting management domain
+│   └── memory/              # Memory/document domain
+└── shared/                  # Shared infrastructure and utilities
+    ├── domain/              # Common domain primitives
+    ├── infrastructure/      # Shared infrastructure services
+    └── errors.ts            # Common error handling
 ```
 
 ## 🎯 Hexagonal Architecture Benefits
