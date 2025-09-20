@@ -4,7 +4,7 @@ import fastifyHelmet from '@fastify/helmet'
 import fastifyMultipart from '@fastify/multipart'
 import chalk from 'chalk'
 
-import { container as patronContainer } from '@/contexts/patron/infrastructure/di/patron.container.js'
+import { container as patronContainer } from '@/contexts/user/patron/infrastructure/di/patron.container.js'
 
 export class FastifyServer {
   private app: FastifyInstance
@@ -76,7 +76,7 @@ export class FastifyServer {
 
     this.app.register(
       async fastify => {
-        const patronRoutes = await import('@/contexts/patron/infrastructure/adapters/http/patron.routes.js')
+        const patronRoutes = await import('@/contexts/user/patron/infrastructure/adapters/http/patron.routes.js')
         await fastify.register(patronRoutes.default, { prefix: '/api/v1' })
       },
     )
