@@ -5,7 +5,6 @@ import { UpdatePatronUseCase } from '@/contexts/user/patron/application/use-case
 import { DeletePatronUseCase } from '@/contexts/user/patron/application/use-cases/delete-patron.use-case.js'
 import { ListPatronsUseCase } from '@/contexts/user/patron/application/use-cases/list-patrons.use-case.js'
 import { handleHttpError } from '@/shared/errors.js'
-import { container } from '@/contexts/user/patron/infrastructure/di/patron.container.js'
 import { PatronDto } from '@/contexts/user/patron/application/dtos/patron.dto'
 
 // DTOs for HTTP layer
@@ -30,19 +29,13 @@ type ListPatronsQuerystring = {
 }
 
 export class PatronController {
-  private createPatronUseCase: CreatePatronUseCase
-  private getPatronUseCase: GetPatronUseCase
-  private updatePatronUseCase: UpdatePatronUseCase
-  private deletePatronUseCase: DeletePatronUseCase
-  private listPatronsUseCase: ListPatronsUseCase
-
-  constructor() {
-    this.createPatronUseCase = container.resolve('createPatronUseCase')
-    this.getPatronUseCase = container.resolve('getPatronUseCase')
-    this.updatePatronUseCase = container.resolve('updatePatronUseCase')
-    this.deletePatronUseCase = container.resolve('deletePatronUseCase')
-    this.listPatronsUseCase = container.resolve('listPatronsUseCase')
-  }
+  constructor(
+    private readonly createPatronUseCase: CreatePatronUseCase,
+    private readonly getPatronUseCase: GetPatronUseCase,
+    private readonly updatePatronUseCase: UpdatePatronUseCase,
+    private readonly deletePatronUseCase: DeletePatronUseCase,
+    private readonly listPatronsUseCase: ListPatronsUseCase,
+  ) {}
 
   // Create patron
   async create(request: FastifyRequest<{ Body: CreatePatronRequest }>, reply: FastifyReply) {

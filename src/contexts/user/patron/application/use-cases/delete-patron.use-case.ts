@@ -2,10 +2,8 @@ import { IPatronRepository } from '@/contexts/user/patron/domain/patron.reposito
 import { NotFoundError } from '@/shared/errors.js'
 import { DeletePatronCommand } from '@/contexts/user/patron/application/dtos/delete-patron.command.js'
 
-import { container } from '@/contexts/user/patron/infrastructure/di/patron.container.js'
-
 export class DeletePatronUseCase {
-  private patronRepository: IPatronRepository = container.resolve<IPatronRepository>('patronRepository')
+  constructor(private patronRepository: IPatronRepository) { }
 
   async execute(command: DeletePatronCommand): Promise<void> {
     const patron = await this.patronRepository.findById(command.id)

@@ -2,7 +2,6 @@ import {
   createContainer,
   asClass,
   InjectionMode,
-  Lifetime,
   type AwilixContainer,
 } from 'awilix'
 
@@ -39,26 +38,27 @@ export type DIContainer = {
 
 export function createDIContainer(): AwilixContainer<DIContainer> {
   const container = createContainer<DIContainer>({
-    injectionMode: InjectionMode.PROXY,
+    injectionMode: InjectionMode.CLASSIC,
     strict: true,
   })
 
-  // Register services
+  // Register repositories
   container.register({
-    // Repository
-    patronRepository: asClass(MongoosePatronRepository, {
-      lifetime: Lifetime.SINGLETON,
-    }),
+    patronRepository: asClass(MongoosePatronRepository).singleton(),
+  })
 
-    // Use Cases
-    createPatronUseCase: asClass(CreatePatronUseCase),
-    getPatronUseCase: asClass(GetPatronUseCase),
-    updatePatronUseCase: asClass(UpdatePatronUseCase),
-    deletePatronUseCase: asClass(DeletePatronUseCase),
-    listPatronsUseCase: asClass(ListPatronsUseCase),
+  // Register use cases
+  container.register({
+    createPatronUseCase: asClass(CreatePatronUseCase).scoped(),
+    getPatronUseCase: asClass(GetPatronUseCase).scoped(),
+    updatePatronUseCase: asClass(UpdatePatronUseCase).scoped(),
+    deletePatronUseCase: asClass(DeletePatronUseCase).scoped(),
+    listPatronsUseCase: asClass(ListPatronsUseCase).scoped(),
+  })
 
-    // Controller
-    patronController: asClass(PatronController),
+  // Register controllers
+  container.register({
+    patronController: asClass(PatronController).scoped(),
   })
 
   return container

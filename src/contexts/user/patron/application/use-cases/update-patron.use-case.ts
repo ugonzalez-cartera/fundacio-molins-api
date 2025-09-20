@@ -3,9 +3,9 @@ import { IPatronRepository } from '@/contexts/user/patron/domain/patron.reposito
 import { PatronDto } from '@/contexts/user/patron/application/dtos/patron.dto.js'
 import { UpdatePatronCommand } from '@/contexts/user/patron/application/dtos/update-patron.command.js'
 import { NotFoundError, ValidationError, ConflictError } from '@/shared/errors.js'
-import { container } from '@/contexts/user/patron/infrastructure/di/patron.container.js'
+
 export class UpdatePatronUseCase {
-  private patronRepository = container.resolve<IPatronRepository>('patronRepository')
+  constructor(private patronRepository: IPatronRepository) { }
 
   async execute(command: UpdatePatronCommand): Promise<PatronDto> {
     if (!command.id) {

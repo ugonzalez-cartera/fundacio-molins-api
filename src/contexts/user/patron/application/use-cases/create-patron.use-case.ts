@@ -4,12 +4,12 @@ import type {  PatronDto } from '@/contexts/user/patron/application/dtos/patron.
 import type { CreatePatronCommand } from '@/contexts/user/patron/application/dtos/create-patron.command.js'
 import { ConflictError } from '@/shared/errors.js'
 
-import { container } from '@/contexts/user/patron/infrastructure/di/patron.container.js'
 export class CreatePatronUseCase {
-  private patronRepository = container.resolve<IPatronRepository>('patronRepository')
+  constructor(private readonly patronRepository: IPatronRepository) {}
 
   async execute(command: CreatePatronCommand): Promise<PatronDto> {
     // Create domain entity with business logic validation
+
     const patron = Patron.create({
       id: command.email,
       email: command.email,

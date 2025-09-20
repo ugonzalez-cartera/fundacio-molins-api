@@ -4,9 +4,8 @@ import { PatronDto } from '@/contexts/user/patron/application/dtos/patron.dto.js
 import { GetPatronQuery } from '@/contexts/user/patron/application/dtos/get-patron.query.js'
 import { NotFoundError } from '@/shared/errors.js'
 
-import { container } from '@/contexts/user/patron/infrastructure/di/patron.container.js'
 export class GetPatronUseCase {
-  private patronRepository = container.resolve<IPatronRepository>('patronRepository')
+  constructor(private patronRepository: IPatronRepository) {}
 
   async execute(query: GetPatronQuery): Promise<PatronDto> {
     const patron = await this.patronRepository.findById(query.id)
