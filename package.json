@@ -13,6 +13,7 @@
     "test": "vitest",
     "test:app": "vitest ./app",
     "test:config": "vitest ./config",
+    "test:connection": "vitest ./connection",
     "test:user": "vitest ./shared/domain/user",
     "test:patron": "vitest ./contexts/patron",
     "test:memory": "vitest ./contexts/memory",
