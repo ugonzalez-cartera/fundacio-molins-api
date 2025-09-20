@@ -103,6 +103,7 @@ describe('Patron methods', () => {
     const primitives = patron.toPrimitives()
 
     expect(primitives).toEqual({
+      id: '123',
       givenName: 'John',
       familyName: 'Doe',
       email: 'johndoe@test.com',
