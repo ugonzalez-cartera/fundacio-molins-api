@@ -13,7 +13,7 @@
     "outDir": "./dist",
     "rootDir": "./",
     "removeComments": true,
-    "noEmitOnError": true,
+    "noEmitOnError": false,
     "resolveJsonModule": true,
     "sourceMap": true,
     "baseUrl": ".",

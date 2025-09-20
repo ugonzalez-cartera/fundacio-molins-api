@@ -31,20 +31,78 @@ This project implements **Hexagonal Architecture** (also known as Ports and Adap
 
 ```
 src/
-├── app/                      # Application orchestration layer
-│   ├── app.ts                # Main application class
-│   └── tests/                # Application tests
-├── contexts/                 # Business domains (Bounded Contexts)
-│   ├── patron/              # Patron management domain
-│   │   ├── domain/          # Business logic and entities
-│   │   ├── application/     # Use cases and DTOs
-│   │   └── infrastructure/  # External adapters (DB, HTTP)
-│   ├── meeting/             # Meeting management domain
-│   └── memory/              # Memory/document domain
-└── shared/                  # Shared infrastructure and utilities
-    ├── domain/              # Common domain primitives
-    ├── infrastructure/      # Shared infrastructure services
-    └── errors.ts            # Common error handling
+├── app/                              # Application orchestration layer
+│   ├── app.ts                        # Main application class
+│   └── tests/
+│       └── app.test.ts               # Application tests
+├── contexts/                         # Business domains (Bounded Contexts)
+│   └── user/                         # User management domain
+│       ├── user.entity.ts            # User domain entity
+│       ├── user.type.ts              # User type definitions
+│       ├── tests/
+│       │   └── user.test.ts          # User domain tests
+│       ├── value-objects/            # User value objects
+│       │   ├── email.ts
+│       │   ├── given-name.ts
+│       │   ├── role.ts
+│       │   └── index.ts
+│       └── patron/                   # Patron subdomain
+│           ├── domain/               # Business logic and entities
+│           │   ├── patron.entity.ts
+│           │   ├── patron.interface.ts
+│           │   ├── patron.repository.ts
+│           │   ├── patron.type.ts
+│           │   ├── tests/
+│           │   │   └── patron.test.ts
+│           │   └── value-objects/
+│           │       ├── position.ts
+│           │       └── index.ts
+│           ├── application/          # Use cases and DTOs
+│           │   ├── dtos/
+│           │   │   ├── create-patron.command.ts
+│           │   │   ├── delete-patron.command.ts
+│           │   │   ├── get-patron.query.ts
+│           │   │   ├── list-patrons.query.ts
+│           │   │   ├── patron.dto.ts
+│           │   │   └── update-patron.command.ts
+│           │   └── use-cases/
+│           │       ├── create-patron.use-case.ts
+│           │       ├── delete-patron.use-case.ts
+│           │       ├── get-patron.use-case.ts
+│           │       ├── list-patrons.use-case.ts
+│           │       ├── update-patron.use-case.ts
+│           │       └── index.ts
+│           └── infrastructure/       # External adapters (DB, HTTP)
+│               ├── mongoose-patron.model.ts
+│               ├── mongoose-patron.repository.ts
+│               ├── di/
+│               │   └── patron.container.ts
+│               └── adapters/
+│                   └── http/
+│                       ├── patron.controller.ts
+│                       ├── patron.routes.ts
+│                       └── schemas/
+│                           ├── create-patron.schema.ts
+│                           ├── delete-patron.schema.ts
+│                           ├── get-patron.schema.ts
+│                           ├── list-patrons.schema.ts
+│                           ├── patron-params.schema.ts
+│                           └── index.ts
+└── shared/                           # Shared infrastructure and utilities
+    ├── enums/
+    │   └── roles.enum.ts             # Application-wide enums
+    ├── infrastructure/               # Shared infrastructure services
+    │   ├── config/
+    │   │   ├── config.service.ts     # Configuration management
+    │   │   └── tests/
+    │   │       └── config.services.test.ts
+    │   ├── database/
+    │   │   └── connection.ts         # Database connection
+    │   ├── lifecycle/
+    │   │   └── application-lifecycle.ts
+    │   └── server/
+    │       └── fastify-server.ts     # Web server setup
+    └── errors.ts                     # Common error handling
 ```
 
 ## 🎯 Hexagonal Architecture Benefits
